@@ -1,0 +1,16 @@
+type BetEvent @entity {
+  id: ID!
+  privateOrPublic: Int
+  name: String!
+  deadline: BigInt! # uint256
+  choiceOne: Bytes!
+  choiceTwo: Bytes!
+  choiceThree: Bytes
+  choiceFour: Bytes
+  correctChoice: Int
+  betMaster: Bytes!
+  pundit: Bytes
+  amount: BigInt
+  profit: BigInt
+  executed: Boolean
+}

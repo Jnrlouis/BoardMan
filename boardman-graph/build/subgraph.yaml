@@ -1,0 +1,51 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: BoardMan
+    network: mumbai
+    source:
+      address: "0xb185D40c24fa75Bc43910cbb9a8A5C141E0d2995"
+      abi: BoardMan
+      startBlock: 29264823
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - BETCREATED
+        - BETCREATED1
+        - BETCREATED2
+        - BETCREATED3
+        - BETEXECUTED
+        - BETMASTERPAYOUTCLAIMED
+        - BETPLACED
+        - BETPLACED1
+        - OwnershipTransferred
+        - PAYOUTCLAIMED
+      abis:
+        - name: BoardMan
+          file: BoardMan\abis\BoardMan.json
+      eventHandlers:
+        - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,address,address,uint256)
+          handler: handleBETCREATED
+        - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,address,uint8)
+          handler: handleBETCREATED1
+        - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,bytes32,address,uint8)
+          handler: handleBETCREATED2
+        - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,bytes32,bytes32,address,uint8)
+          handler: handleBETCREATED3
+        - event: BETEXECUTED(uint256,uint8,bool)
+          handler: handleBETEXECUTED
+        - event: BETMASTERPAYOUTCLAIMED(uint256,uint256,address)
+          handler: handleBETMASTERPAYOUTCLAIMED
+        - event: BETPLACED(address,uint256,uint8,uint256)
+          handler: handleBETPLACED
+        - event: BETPLACED(address,uint256,uint256)
+          handler: handleBETPLACED1
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: PAYOUTCLAIMED(uint256,uint256,address)
+          handler: handlePAYOUTCLAIMED
+      file: BoardMan\BoardMan.wasm

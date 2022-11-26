@@ -1,0 +1,234 @@
+.bets__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  width: 100%;
+}
+.bets__header {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  padding: 20px;
+}
+
+.bets__h1 {
+  font-size: 22px;
+}
+
+.bets__p {
+  font-size: 15px;
+}
+
+.bets__select {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding: 30px;
+}
+
+.bets__selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.selector__div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selector {
+  padding: 60% 100%;
+  border-radius: 10px;
+  display: flex;
+  font-size: 13px;
+
+  text-align: justify;
+}
+
+.bets__container form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.bets__container form input {
+  color: var(--txt-color);
+  padding: 8px;
+  width: 100%;
+  height: auto;
+  font-size: 13px;
+  box-sizing: border-box;
+  background-color: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+}
+
+.bets__filter__icon {
+  color: var(--border-color);
+  font-size: 25px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 980px) {
+  .bets__select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .bets__select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .bets__select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    padding: 15px;
+  }
+
+  .bets__selector {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+  }
+
+  .selector__div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .selector {
+    padding: 16% 50%;
+    border-radius: 10px;
+    display: flex;
+    font-size: 13px;
+
+    text-align: justify;
+  }
+
+  .bets__container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .bets__container form input {
+    color: var(--txt-color);
+    padding: 8px;
+    width: 100%;
+    height: auto;
+    font-size: 13px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .bets__filter__icon {
+    color: var(--border-color);
+    font-size: 25px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .bets__select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .bets__selector {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+  }
+
+  .selector__div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .selector {
+    padding: 16% 40%;
+    border-radius: 10px;
+    display: flex;
+    font-size: 13px;
+
+    text-align: justify;
+  }
+
+  .bets__container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .bets__container form input {
+    color: var(--txt-color);
+    padding: 8px;
+    width: 100%;
+    height: auto;
+    font-size: 13px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .bets__filter__icon {
+    color: var(--border-color);
+    font-size: 25px;
+    cursor: pointer;
+  }
+}
