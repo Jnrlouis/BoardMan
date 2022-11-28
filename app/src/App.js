@@ -13,8 +13,11 @@ import Bets from "./pages/Bets";
 import History from "./pages/History";
 import Team from "./pages/Team";
 import Help from "./pages/Help";
+import TawkMessengerReact from "@tawk.to/tawk-messenger-react";
+import Contact from "./pages/Contact";
 
 function App() {
+  const tawkMessengerRef = useRef();
   return (
     <div className="App">
       <Header />
@@ -26,7 +29,14 @@ function App() {
         <Route path="/history" element={<History />} />
         <Route path="/team" element={<Team />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
+
+      <TawkMessengerReact
+        propertyId={`${process.env.REACT_APP_TAWK_PROJECT_ID}`}
+        widgetId={`${process.env.REACT_APP_TAWK_WIDGET_ID}`}
+        ref={tawkMessengerRef}
+      />
 
       <Footer />
     </div>

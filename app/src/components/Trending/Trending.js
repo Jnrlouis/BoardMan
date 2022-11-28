@@ -2,6 +2,9 @@ import React from "react";
 import { BsPlayBtn } from "react-icons/bs";
 import "./Trending.css";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.jpg";
+import { FaMoneyBill } from "react-icons/fa";
+import { IoIosPeople } from "react-icons/io";
 
 const Trending = () => {
   const navigate = useNavigate();
@@ -17,25 +20,32 @@ const Trending = () => {
         <div className="t__card">
           <div className="t__left">
             <div className="t__left__info">
-              <div className="subject">No of entries:</div>
-              <div className="value">115</div>
+              <div className="subject">
+                <span>#3</span>
+              </div>
             </div>
             <div className="t__left__info">
-              <div className="subject">Expires in:</div>
-              <div className="value">3 hours</div>
+              <div className="subject">0 Players</div>
+            </div>
+            <div className="t__left__info">
+              <div className="subject">OPEN</div>
             </div>
             <div className="t__left__info">
               <div className="subject">
-                By: <span>#15D32</span>
-              </div>
-              <div className="value1">
-                <BsPlayBtn />
-                <p>49:30</p>
+                <div className="value1">
+                  <div className="value1">
+                    <FaMoneyBill />
+                    <p>5 MATIC</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div className="t__center">
+            <IoIosPeople className="state__logo" />
+          </div>
           <div className="t__right">
-            <p>1.3 odds</p>
+            <p>Public</p>
             <button className="btn1">Details</button>
             <button className="btn2">Enter</button>
           </div>
@@ -44,25 +54,29 @@ const Trending = () => {
         <div className="t__card">
           <div className="t__left">
             <div className="t__left__info">
-              <div className="subject">No of entries:</div>
-              <div className="value">115</div>
+              <div className="subject">
+                <span>#3</span>
+              </div>
             </div>
             <div className="t__left__info">
-              <div className="subject">Expires in:</div>
-              <div className="value">3 hours</div>
+              <div className="subject">0 Players</div>
             </div>
             <div className="t__left__info">
               <div className="subject">
-                By: <span>#15D32</span>
-              </div>
-              <div className="value1">
-                <BsPlayBtn />
-                <p>49:30</p>
+                <div className="value1">
+                  <div className="value1">
+                    <FaMoneyBill />
+                    <p>5 MATIC</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div className="t__center">
+            <IoIosPeople className="state__logo" />
+          </div>
           <div className="t__right">
-            <p>1.3 odds</p>
+            <p>Public</p>
             <button className="btn1">Details</button>
             <button className="btn2">Enter</button>
           </div>
@@ -71,25 +85,29 @@ const Trending = () => {
         <div className="t__card">
           <div className="t__left">
             <div className="t__left__info">
-              <div className="subject">No of entries:</div>
-              <div className="value">115</div>
+              <div className="subject">
+                <span>#3</span>
+              </div>
             </div>
             <div className="t__left__info">
-              <div className="subject">Expires in:</div>
-              <div className="value">3 hours</div>
+              <div className="subject">0 Players</div>
             </div>
             <div className="t__left__info">
               <div className="subject">
-                By: <span>#15D32</span>
-              </div>
-              <div className="value1">
-                <BsPlayBtn />
-                <p>49:30</p>
+                <div className="value1">
+                  <div className="value1">
+                    <FaMoneyBill />
+                    <p>5 MATIC</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div className="t__center">
+            <IoIosPeople className="state__logo" />
+          </div>
           <div className="t__right">
-            <p>1.3 odds</p>
+            <p>Public</p>
             <button className="btn1">Details</button>
             <button className="btn2">Enter</button>
           </div>
@@ -98,25 +116,29 @@ const Trending = () => {
         <div className="t__card">
           <div className="t__left">
             <div className="t__left__info">
-              <div className="subject">No of entries:</div>
-              <div className="value">115</div>
+              <div className="subject">
+                <span>#3</span>
+              </div>
             </div>
             <div className="t__left__info">
-              <div className="subject">Expires in:</div>
-              <div className="value">3 hours</div>
+              <div className="subject">0 Players</div>
             </div>
             <div className="t__left__info">
               <div className="subject">
-                By: <span>#15D32</span>
-              </div>
-              <div className="value1">
-                <BsPlayBtn />
-                <p>49:30</p>
+                <div className="value1">
+                  <div className="value1">
+                    <FaMoneyBill />
+                    <p>5 MATIC</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div className="t__center">
+            <IoIosPeople className="state__logo" />
+          </div>
           <div className="t__right">
-            <p>1.3 odds</p>
+            <p>Public</p>
             <button className="btn1">Details</button>
             <button className="btn2">Enter</button>
           </div>

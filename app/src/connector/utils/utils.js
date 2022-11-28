@@ -30,6 +30,7 @@ import { getNumBets } from "./getNumBets";
         totalNOB: bet.totals.totalBets.toString(),
         totalAmountBet: utils.formatEther(bet.totals.totalAmount),
         corrChoice: bet.finalize.correctChoice,
+        privateCorrChoice: bet.privorpub.PP_correctChoice,
         executed: bet.finalize.executed,
 
       };
@@ -54,3 +55,47 @@ import { getNumBets } from "./getNumBets";
       console.error(error);
     }
   };
+
+  export const getPrivateBetAmount = async (provider, id) => {
+    try {
+      const contract = getBoardManContractInstance(provider);
+      const bet = await contract.betEvents(id);
+      const amount = utils.formatEther(bet.privorpub.PP_amount);
+      return amount;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  export const getChallengeAccepted = async (provider, id) => {
+    try {
+      const contract = getBoardManContractInstance(provider);
+      const bet = await contract.betEvents(id);
+      const accepted = bet.privorpub.challengeAccepted;
+      return accepted;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  export const checkActive = async (provider, id) => {
+    try {
+      const contract = getBoardManContractInstance(provider);
+      const bet = await contract.betEvents(id);
+      const isActive = bet.privorpub.active;
+      return isActive;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  export const checkExecuted = async (provider, id) => {
+    try {
+      const contract = getBoardManContractInstance(provider);
+      const bet = await contract.betEvents(id);
+      const isExecuted = bet.finalize.executed;
+      return isExecuted;
+    } catch (error) {
+      console.error(error);
+    }
+  }

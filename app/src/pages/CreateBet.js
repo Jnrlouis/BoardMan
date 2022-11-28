@@ -172,12 +172,13 @@ const CreateBet = (props) => {
                 className="text__input__name"
               />
 
-              <div className="input-box">
+              <div>
                 <span className="details">Deadline:</span>
                 <input
                   type="datetime-local"
                   name="deadline"
                   onChange={(e) => setDeadline(e.target.value)}
+                  className="text__input__name"
                   required />
               </div>
 
@@ -236,12 +237,13 @@ const CreateBet = (props) => {
 
               <p className="bet__amount">Bet Amount: 5 MATIC</p>
 
-              <div className="input-box">
+              <div>
                 <span className="details">Deadline:</span>
                 <input
                   type="datetime-local"
                   name="deadline"
                   onChange={(e) => setDeadline(e.target.value)}
+                  className="text__input__name"
                   required />
               </div>
               <div>

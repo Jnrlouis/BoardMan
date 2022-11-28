@@ -422,12 +422,13 @@
 
 .radio__info {
   display: flex;
-  flex-direction: row;
+  flex-direction: row !important;
   gap: 10px;
+  font-size: 15px !important;
 }
 .attribute__div {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;

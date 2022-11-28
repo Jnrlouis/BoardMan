@@ -36,7 +36,7 @@
   background-color: #2c0433;
   width: 100%;
   padding: 30px 20px;
-  gap: 40px;
+  gap: 70px;
   font-size: 12px;
   font-weight: 100;
   color: #b8b8b8;
@@ -48,7 +48,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 70%;
+
   gap: 10px;
 }
 
@@ -60,14 +60,21 @@
   gap: 50px;
   text-align: left;
 }
-
+.t__center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.state__logo {
+  font-size: 50px;
+  color: var(--background-color);
+}
 .t__right {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 30%;
 }
 
 .btn1 {
@@ -96,6 +103,35 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-size: 11px;
+}
+.person {
+  font-size: 15px;
+}
+
+.red {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 11px;
+  color: red;
+  opacity: 0.5;
+}
+
+.nft__h1 {
+  color: white;
+}
+
+.green {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 11px;
+  color: green;
 }
 
 .value1 {
@@ -103,8 +139,13 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-size: 10px;
+  gap: 5px;
+  font-size: 9px;
+  width: 100%;
+}
+
+.money {
+  font-size: 15px;
 }
 
 span {
@@ -113,6 +154,7 @@ span {
 .subject {
   display: flex;
   flex-direction: row;
+  font-size: 12px;
 }
 
 @media screen and (max-width: 1300px) {
@@ -149,8 +191,8 @@ span {
     align-items: center;
     background-color: #2c0433;
     width: 100%;
-    padding: 30px 20px;
-    gap: 70px;
+    padding: 22px 20px;
+    gap: 60px;
     font-size: 12px;
     font-weight: 100;
     color: #b8b8b8;
@@ -262,7 +304,7 @@ span {
     justify-content: flex-start;
     align-items: flex-start;
     width: 70%;
-    gap: 20px;
+    gap: 10px;
   }
 
   .t__left__info {

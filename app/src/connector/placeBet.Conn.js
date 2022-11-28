@@ -2,17 +2,17 @@ import { getBoardManContractInstance } from "./utils/getBoardManContractInstance
 import { squashOdds } from "./utils/processOdds";
 import { getOdds } from "./utils/getOdds";
 import { utils } from "ethers";
-import { fetchAllBets } from "./utils/utils";
+import { fetchAllBets, getPrivateBetAmount } from "./utils/utils";
 
 export const placeBet = async (signer, betId, choice, stake) => {
     try {
       const contract = getBoardManContractInstance(signer);
-
+      stake = utils.parseEther(stake);
       const txn = await contract.placeBet(betId, choice.toString(), {value: stake});
 
     //   setLoading(true);
       await txn.wait();
-      let odds = await getOdds(betId);
+      let odds = await getOdds(signer, betId);
       let finalX = squashOdds(odds);
       console.log("HERE AFTER SQUASH ODDS PLACE BET, FINALX", finalX);
       let FFOdd = utils.parseEther(finalX[0].toString());
@@ -22,10 +22,42 @@ export const placeBet = async (signer, betId, choice, stake) => {
       let tx = await contract.finalOdds(betId, FFOdd, SFOdd, TFOdd, FoFOdd);
       await tx.wait();
     //   setLoading(false);
-      await fetchAllBets();
+      await fetchAllBets(signer);
     } catch (error) {
       console.error(error);
     //   setLoading(false);
       window.alert(error.message);
     }
 };
+
+export const acceptChallenge = async (signer, betId) => {
+  try {
+    let amount = await getPrivateBetAmount(signer, betId);
+    amount = utils.parseEther(amount);
+    console.log("Amount: ", amount);
+    const contract = getBoardManContractInstance(signer);
+
+    const txn = await contract.acceptChallenge(betId, {value: amount});
+
+    await txn.wait();
+
+  } catch (error) {
+    console.error(error);
+    window.alert(error.message);
+  }
+}
+
+export const recallChallenge = async (signer, betId) => {
+  try {
+    
+    const contract = getBoardManContractInstance(signer);
+
+    const txn = await contract.recallChallenge(betId);
+
+    await txn.wait();
+
+  } catch (error) {
+    console.error(error);
+    window.alert(error.message);
+  }
+}

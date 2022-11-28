@@ -119,6 +119,7 @@ contract BoardMan is Ownable, helper {
         bool finalOddsUpdated;
         bool executed;
         uint256 datetimeExecuted;
+        mapping (address => bool) claimed;
     }
 
     struct BetEvent {
@@ -245,7 +246,6 @@ contract BoardMan is Ownable, helper {
     }
     function recallChallenge (uint _betId) external
     onlyActive (_betId)
-    activeBetEventOnly (_betId)
     onlyBetMaster (_betId)
     challengeNotAccepted (_betId)
     checkIntegrity
@@ -288,11 +288,11 @@ contract BoardMan is Ownable, helper {
         BetEvent storage betEvent = betEvents[_betId];
         betEvent.finalize.executed = true;
         betEvent.finalize.datetimeExecuted = block.timestamp;
-        if (_correctChoice == 0) {
+        if (_correctChoice == 1) {
             betEvent.privorpub.PP_correctChoice = betEvent.privorpub.PP_yourChoice;
             betEvent.privorpub.winner = betEvent.init.betMaster;
         }
-        if (_correctChoice == 1) {
+        if (_correctChoice == 2) {
             betEvent.privorpub.PP_correctChoice = betEvent.privorpub.PP_opponentsChoice;
             betEvent.privorpub.winner = betEvent.privorpub.privateBetOpponent;
         }
@@ -309,6 +309,7 @@ contract BoardMan is Ownable, helper {
     }
     function winnerTakesAll (uint256 _betId) external
     onlyActive(_betId)
+    onlyUnclaimed(_betId)
     only_PP_Winner (_betId)
     challengeAccepted (_betId)
     inactiveBetEventToClaim (_betId) 
@@ -321,6 +322,7 @@ contract BoardMan is Ownable, helper {
         amount = (amount * 95)/100;
         betEvent.totals.totalAmount = 0;
         betEvent.privorpub.active = false;
+        betEvent.finalize.claimed[msg.sender] = true;
         address winner = betEvent.privorpub.winner;
         (bool success, ) = payable(winner).call{value: amount}("");
         require(success, "Failed to send Ether");
@@ -490,6 +492,7 @@ contract BoardMan is Ownable, helper {
     }
 
     enum Choices {
+        defaultChoice,
         choiceOne_,
         choiceTwo_,
         choiceThree_,
@@ -554,12 +557,17 @@ contract BoardMan is Ownable, helper {
         BetEvent storage betEvent = betEvents[_betId];
         uint256 amount = msg.value;
 
+        if (choice_ == Choices.defaultChoice) {
+            uint8 option = 0;
+            require(option > 0, "INVALID CHOICE");
+        }
+
         if (choice_ == Choices.choiceOne_) {
             uint8 option = 1;
             checkValidChoices(_betId, option);
             betEvent.choiceOne.choiceOneNoB += 1;
             betEvent.choiceOne.choiceOneAmount += amount;
-            betEvent.amountMaps[msg.sender].choiceAmountMap[0] += amount;
+            betEvent.amountMaps[msg.sender].choiceAmountMap[1] += amount;
             success = true;
             emit BETPLACED (
                 msg.sender,
@@ -578,7 +586,7 @@ contract BoardMan is Ownable, helper {
             checkValidChoices(_betId, option);
             betEvent.choiceTwo.choiceTwoNoB += 1;
             betEvent.choiceTwo.choiceTwoAmount += amount;
-            betEvent.amountMaps[msg.sender].choiceAmountMap[1] += amount;
+            betEvent.amountMaps[msg.sender].choiceAmountMap[2] += amount;
             success = true;
             emit BETPLACED (
                 msg.sender,
@@ -596,7 +604,7 @@ contract BoardMan is Ownable, helper {
             checkValidChoices(_betId, option);
             betEvent.choiceThree.choiceThreeNoB += 1;
             betEvent.choiceThree.choiceThreeAmount += amount;
-            betEvent.amountMaps[msg.sender].choiceAmountMap[2] += amount;
+            betEvent.amountMaps[msg.sender].choiceAmountMap[3] += amount;
             success = true;
             emit BETPLACED (
                 msg.sender,
@@ -614,7 +622,7 @@ contract BoardMan is Ownable, helper {
             checkValidChoices(_betId, option);
             betEvent.choiceFour.choiceFourNoB += 1;
             betEvent.choiceFour.choiceFourAmount += amount;
-            betEvent.amountMaps[msg.sender].choiceAmountMap[3] += amount;
+            betEvent.amountMaps[msg.sender].choiceAmountMap[4] += amount;
             success = true;
             emit BETPLACED (
                 msg.sender,
@@ -657,6 +665,13 @@ contract BoardMan is Ownable, helper {
     modifier onlyBetMaster(uint256 _betId) {
         address caller = msg.sender;
         require(caller == betEvents[_betId].init.betMaster || caller == admin,
+        "NOT_THE_BET_MASTER"
+        );
+        _;
+    }
+
+    modifier onlyUnclaimed(uint256 _betId) {
+        require(betEvents[_betId].finalize.claimed[msg.sender] == false,
         "NOT_THE_BET_MASTER"
         );
         _;
@@ -884,13 +899,15 @@ contract BoardMan is Ownable, helper {
         _;
     }
     function claimPayout(uint256 _betId) external
-    inactiveBetEventToClaim(_betId) 
+    inactiveBetEventToClaim(_betId)
+    onlyUnclaimed(_betId) 
     onlyWinners(_betId)
     onlyWhenFinalOddsUpdated(_betId)
     checkIntegrity
     returns (bool success) {
         BetEvent storage betEvent = betEvents[_betId];
         uint8 correctChoice__ = betEvent.finalize.correctChoice;
+        betEvent.finalize.claimed[msg.sender] = true;
         uint256 amountBet = betEvent.amountMaps[msg.sender].choiceAmountMap[correctChoice__];
         uint256 payout = (amountBet * betEvent.finalOddsMaps[correctChoice__])/(10 ** PRECISION);
         betEvent.amountMaps[msg.sender].choiceAmountMap[correctChoice__] = 0;
@@ -905,6 +922,7 @@ contract BoardMan is Ownable, helper {
 
     function claimBetMaster(uint256 _betId) external payable 
     onlyBetMaster(_betId)
+    onlyUnclaimed(_betId)
     checkIntegrity
     inactiveBetEventToClaim(_betId) returns (bool success){
         BetEvent storage betEvent = betEvents[_betId];
@@ -913,6 +931,7 @@ contract BoardMan is Ownable, helper {
         _amount = (_amount * betEvent.finalOddsMaps[correctChoice__])/(10 ** PRECISION);
         uint256 _totalAmount = betEvent.totals.totalAmount;
         address betMasterAddress = betEvent.init.betMaster;
+        betEvent.finalize.claimed[msg.sender] = true;
         success = payCut(_betId, _amount, _totalAmount, betMasterAddress);
         return success;
     }

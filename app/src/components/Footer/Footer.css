@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+.logo {
+  width: 50%;
+  border-radius: 10px;
+}
+
 .footer__container {
   max-width: 1170px;
   margin: auto;
