@@ -116,10 +116,9 @@ contract BoardMan is Ownable, helper {
 
     struct FINALIZE {
         uint8 correctChoice;
-        bool finalOddsUpdated;
         bool executed;
         uint256 datetimeExecuted;
-        mapping (address => bool) claimed;
+        
     }
 
     struct BetEvent {
@@ -142,6 +141,8 @@ contract BoardMan is Ownable, helper {
         mapping(uint8 => uint256) finalOddsMaps;
 
         mapping(address => AmountMaps) amountMaps;
+
+        mapping (address => bool) claimed;
     }
 
     // Create a mapping of ID to BetEvent
@@ -322,7 +323,7 @@ contract BoardMan is Ownable, helper {
         amount = (amount * 95)/100;
         betEvent.totals.totalAmount = 0;
         betEvent.privorpub.active = false;
-        betEvent.finalize.claimed[msg.sender] = true;
+        betEvent.claimed[msg.sender] = true;
         address winner = betEvent.privorpub.winner;
         (bool success, ) = payable(winner).call{value: amount}("");
         require(success, "Failed to send Ether");
@@ -671,8 +672,8 @@ contract BoardMan is Ownable, helper {
     }
 
     modifier onlyUnclaimed(uint256 _betId) {
-        require(betEvents[_betId].finalize.claimed[msg.sender] == false,
-        "NOT_THE_BET_MASTER"
+        require(betEvents[_betId].claimed[msg.sender] == false,
+        "CLAIMED"
         );
         _;
     }
@@ -870,7 +871,6 @@ contract BoardMan is Ownable, helper {
         betEvent.finalOddsMaps[2] = odds2;
         betEvent.finalOddsMaps[3] = odds3;
         betEvent.finalOddsMaps[4] = odds4;
-        betEvent.finalize.finalOddsUpdated = true;
         return (odds1, odds2, odds3, odds4);
     }
 
@@ -892,22 +892,15 @@ contract BoardMan is Ownable, helper {
         _;
     }
 
-    modifier onlyWhenFinalOddsUpdated (uint256 _betId) {
-        BetEvent storage betEvent = betEvents[_betId];
-        bool finalOddsUpdated = betEvent.finalize.finalOddsUpdated;
-        require(finalOddsUpdated == true, "Final Odds Not Updated");
-        _;
-    }
     function claimPayout(uint256 _betId) external
     inactiveBetEventToClaim(_betId)
     onlyUnclaimed(_betId) 
     onlyWinners(_betId)
-    onlyWhenFinalOddsUpdated(_betId)
     checkIntegrity
     returns (bool success) {
         BetEvent storage betEvent = betEvents[_betId];
         uint8 correctChoice__ = betEvent.finalize.correctChoice;
-        betEvent.finalize.claimed[msg.sender] = true;
+        betEvent.claimed[msg.sender] = true;
         uint256 amountBet = betEvent.amountMaps[msg.sender].choiceAmountMap[correctChoice__];
         uint256 payout = (amountBet * betEvent.finalOddsMaps[correctChoice__])/(10 ** PRECISION);
         betEvent.amountMaps[msg.sender].choiceAmountMap[correctChoice__] = 0;
@@ -931,7 +924,7 @@ contract BoardMan is Ownable, helper {
         _amount = (_amount * betEvent.finalOddsMaps[correctChoice__])/(10 ** PRECISION);
         uint256 _totalAmount = betEvent.totals.totalAmount;
         address betMasterAddress = betEvent.init.betMaster;
-        betEvent.finalize.claimed[msg.sender] = true;
+        betEvent.claimed[msg.sender] = true;
         success = payCut(_betId, _amount, _totalAmount, betMasterAddress);
         return success;
     }
