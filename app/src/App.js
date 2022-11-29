@@ -3,9 +3,6 @@ import React, { useState, useRef } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import CreateBet from "./pages/CreateBet";
-import { getNumBets } from "./connector/utils/getNumBets";
-import Web3Modal from "web3modal";
-import { providers } from "ethers";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";

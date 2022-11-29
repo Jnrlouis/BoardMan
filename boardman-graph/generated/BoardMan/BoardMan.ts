@@ -541,16 +541,12 @@ export class BoardMan__betEventsResultFinalizeStruct extends ethereum.Tuple {
     return this[0].toI32();
   }
 
-  get finalOddsUpdated(): boolean {
+  get executed(): boolean {
     return this[1].toBoolean();
   }
 
-  get executed(): boolean {
-    return this[2].toBoolean();
-  }
-
   get datetimeExecuted(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 }
 
@@ -698,7 +694,7 @@ export class BoardMan extends ethereum.SmartContract {
   betEvents(param0: BigInt): BoardMan__betEventsResult {
     let result = super.call(
       "betEvents",
-      "betEvents(uint256):((uint256,uint256,uint256,string,address,uint8),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(uint256,uint256,uint256,uint256),(uint8,bool,bool,address,address,bytes32,bytes32,bytes32,uint256),(uint8,bool,bool,uint256))",
+      "betEvents(uint256):((uint256,uint256,uint256,string,address,uint8),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(uint256,uint256,uint256,uint256),(uint8,bool,bool,address,address,bytes32,bytes32,bytes32,uint256),(uint8,bool,uint256))",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -731,7 +727,7 @@ export class BoardMan extends ethereum.SmartContract {
   ): ethereum.CallResult<BoardMan__betEventsResult> {
     let result = super.tryCall(
       "betEvents",
-      "betEvents(uint256):((uint256,uint256,uint256,string,address,uint8),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(uint256,uint256,uint256,uint256),(uint8,bool,bool,address,address,bytes32,bytes32,bytes32,uint256),(uint8,bool,bool,uint256))",
+      "betEvents(uint256):((uint256,uint256,uint256,string,address,uint8),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(bytes32,uint32,uint256,uint256,uint256),(uint256,uint256,uint256,uint256),(uint8,bool,bool,address,address,bytes32,bytes32,bytes32,uint256),(uint8,bool,uint256))",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -1307,70 +1303,20 @@ export class ClaimPayoutCall__Outputs {
   }
 }
 
-export class CreateBetEventCall extends ethereum.Call {
-  get inputs(): CreateBetEventCall__Inputs {
-    return new CreateBetEventCall__Inputs(this);
+export class CreateBetEventFourCall extends ethereum.Call {
+  get inputs(): CreateBetEventFourCall__Inputs {
+    return new CreateBetEventFourCall__Inputs(this);
   }
 
-  get outputs(): CreateBetEventCall__Outputs {
-    return new CreateBetEventCall__Outputs(this);
-  }
-}
-
-export class CreateBetEventCall__Inputs {
-  _call: CreateBetEventCall;
-
-  constructor(call: CreateBetEventCall) {
-    this._call = call;
-  }
-
-  get _name(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get _deadline(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get _choiceOne(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-
-  get _choiceTwo(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-
-  get _choiceThree(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+  get outputs(): CreateBetEventFourCall__Outputs {
+    return new CreateBetEventFourCall__Outputs(this);
   }
 }
 
-export class CreateBetEventCall__Outputs {
-  _call: CreateBetEventCall;
+export class CreateBetEventFourCall__Inputs {
+  _call: CreateBetEventFourCall;
 
-  constructor(call: CreateBetEventCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class CreateBetEvent1Call extends ethereum.Call {
-  get inputs(): CreateBetEvent1Call__Inputs {
-    return new CreateBetEvent1Call__Inputs(this);
-  }
-
-  get outputs(): CreateBetEvent1Call__Outputs {
-    return new CreateBetEvent1Call__Outputs(this);
-  }
-}
-
-export class CreateBetEvent1Call__Inputs {
-  _call: CreateBetEvent1Call;
-
-  constructor(call: CreateBetEvent1Call) {
+  constructor(call: CreateBetEventFourCall) {
     this._call = call;
   }
 
@@ -1399,10 +1345,10 @@ export class CreateBetEvent1Call__Inputs {
   }
 }
 
-export class CreateBetEvent1Call__Outputs {
-  _call: CreateBetEvent1Call;
+export class CreateBetEventFourCall__Outputs {
+  _call: CreateBetEventFourCall;
 
-  constructor(call: CreateBetEvent1Call) {
+  constructor(call: CreateBetEventFourCall) {
     this._call = call;
   }
 
@@ -1411,20 +1357,70 @@ export class CreateBetEvent1Call__Outputs {
   }
 }
 
-export class CreateBetEvent2Call extends ethereum.Call {
-  get inputs(): CreateBetEvent2Call__Inputs {
-    return new CreateBetEvent2Call__Inputs(this);
+export class CreateBetEventThreeCall extends ethereum.Call {
+  get inputs(): CreateBetEventThreeCall__Inputs {
+    return new CreateBetEventThreeCall__Inputs(this);
   }
 
-  get outputs(): CreateBetEvent2Call__Outputs {
-    return new CreateBetEvent2Call__Outputs(this);
+  get outputs(): CreateBetEventThreeCall__Outputs {
+    return new CreateBetEventThreeCall__Outputs(this);
   }
 }
 
-export class CreateBetEvent2Call__Inputs {
-  _call: CreateBetEvent2Call;
+export class CreateBetEventThreeCall__Inputs {
+  _call: CreateBetEventThreeCall;
 
-  constructor(call: CreateBetEvent2Call) {
+  constructor(call: CreateBetEventThreeCall) {
+    this._call = call;
+  }
+
+  get _name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get _deadline(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get _choiceOne(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get _choiceTwo(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+
+  get _choiceThree(): Bytes {
+    return this._call.inputValues[4].value.toBytes();
+  }
+}
+
+export class CreateBetEventThreeCall__Outputs {
+  _call: CreateBetEventThreeCall;
+
+  constructor(call: CreateBetEventThreeCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class CreateBetEventTwoCall extends ethereum.Call {
+  get inputs(): CreateBetEventTwoCall__Inputs {
+    return new CreateBetEventTwoCall__Inputs(this);
+  }
+
+  get outputs(): CreateBetEventTwoCall__Outputs {
+    return new CreateBetEventTwoCall__Outputs(this);
+  }
+}
+
+export class CreateBetEventTwoCall__Inputs {
+  _call: CreateBetEventTwoCall;
+
+  constructor(call: CreateBetEventTwoCall) {
     this._call = call;
   }
 
@@ -1445,10 +1441,10 @@ export class CreateBetEvent2Call__Inputs {
   }
 }
 
-export class CreateBetEvent2Call__Outputs {
-  _call: CreateBetEvent2Call;
+export class CreateBetEventTwoCall__Outputs {
+  _call: CreateBetEventTwoCall;
 
-  constructor(call: CreateBetEvent2Call) {
+  constructor(call: CreateBetEventTwoCall) {
     this._call = call;
   }
 

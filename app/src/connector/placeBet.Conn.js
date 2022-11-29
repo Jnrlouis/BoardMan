@@ -3,9 +3,14 @@ import { squashOdds } from "./utils/processOdds";
 import { getOdds } from "./utils/getOdds";
 import { utils } from "ethers";
 import { fetchAllBets, getPrivateBetAmount } from "./utils/utils";
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const placeBet = async (signer, betId, choice, stake) => {
     try {
+      toast.info("Accept Both transactions from your wallet", {
+        position: toast.POSITION.BOTTOM_CENTER
+      })
       const contract = getBoardManContractInstance(signer);
       stake = utils.parseEther(stake);
       const txn = await contract.placeBet(betId, choice.toString(), {value: stake});
@@ -23,10 +28,11 @@ export const placeBet = async (signer, betId, choice, stake) => {
       await tx.wait();
     //   setLoading(false);
       await fetchAllBets(signer);
+      toast.success("Bet Placed successfully!")
     } catch (error) {
       console.error(error);
     //   setLoading(false);
-      window.alert(error.message);
+      toast.error("An Error occurred");
     }
 };
 
@@ -41,9 +47,11 @@ export const acceptChallenge = async (signer, betId) => {
 
     await txn.wait();
 
+    toast.success("Challenge accepted successfully")
+
   } catch (error) {
     console.error(error);
-    window.alert(error.message);
+    toast.error("An Error occurred");
   }
 }
 
@@ -56,8 +64,10 @@ export const recallChallenge = async (signer, betId) => {
 
     await txn.wait();
 
+    toast.success("Challenged recalled successfully")
+
   } catch (error) {
     console.error(error);
-    window.alert(error.message);
+    toast.error("An Error occurred");
   }
 }

@@ -1,6 +1,10 @@
 import { utils } from "ethers";
 import { getBoardManContractInstance } from "./getBoardManContractInstance";
 import { getNumBets } from "./getNumBets";
+import { getMyBets } from "../../queries/mybets.js";
+
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
  export const fetchBetsById = async (provider, id) => {
     try {
@@ -30,13 +34,14 @@ import { getNumBets } from "./getNumBets";
         totalNOB: bet.totals.totalBets.toString(),
         totalAmountBet: utils.formatEther(bet.totals.totalAmount),
         corrChoice: bet.finalize.correctChoice,
-        privateCorrChoice: bet.privorpub.PP_correctChoice,
+        privateCorrChoice: utils.parseBytes32String(bet.privorpub.PP_correctChoice),
         executed: bet.finalize.executed,
 
       };
       return parsedBet;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
     }
   };
 
@@ -53,6 +58,25 @@ import { getNumBets } from "./getNumBets";
       return bets;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
+    }
+  };
+
+  export const fetchAllMyBets = async (provider, myBetAddress) => {
+    try {
+      const myBetsId = await getMyBets(myBetAddress);
+      const numBetsId = myBetsId.length;
+      const bets = [];
+      for (let i = 0; i < numBetsId; i++) {
+        let j = myBetsId[i][0];
+        const bet = await fetchBetsById(provider, j);
+        bets.push(bet);
+      }
+      console.log("My Bets ID: ", bets);
+      return bets;
+    } catch (error) {
+      console.error(error);
+      toast.error("An Error occured!");
     }
   };
 
@@ -64,6 +88,7 @@ import { getNumBets } from "./getNumBets";
       return amount;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
     }
   }
 
@@ -75,6 +100,7 @@ import { getNumBets } from "./getNumBets";
       return accepted;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
     }
   }
 
@@ -86,6 +112,7 @@ import { getNumBets } from "./getNumBets";
       return isActive;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
     }
   }
 
@@ -97,5 +124,6 @@ import { getNumBets } from "./getNumBets";
       return isExecuted;
     } catch (error) {
       console.error(error);
+      toast.error("An Error occured!");
     }
   }

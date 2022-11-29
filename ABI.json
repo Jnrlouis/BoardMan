@@ -1,1330 +1,1325 @@
 [
-    {
-      "type": "constructor",
-      "name": "",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_createBetEventFee",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "_minBetFee",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "event",
-      "name": "BETCREATED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "deadline_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "privateOrPublic_",
-          "indexed": false,
-          "internalType": "uint8"
-        },
-        {
-          "type": "string",
-          "name": "name_",
-          "indexed": false,
-          "internalType": "string"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceOne_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceTwo_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "address",
-          "name": "betMaster_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "address",
-          "name": "opponentAddress_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint256",
-          "name": "amount_",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETCREATED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "deadline_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "privateOrPublic_",
-          "indexed": false,
-          "internalType": "uint8"
-        },
-        {
-          "type": "string",
-          "name": "name_",
-          "indexed": false,
-          "internalType": "string"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceOne_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceTwo_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "address",
-          "name": "betMaster_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint8",
-          "name": "numOfChoices_",
-          "indexed": false,
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETCREATED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "deadline_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "privateOrPublic",
-          "indexed": false,
-          "internalType": "uint8"
-        },
-        {
-          "type": "string",
-          "name": "name_",
-          "indexed": false,
-          "internalType": "string"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceOne_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceTwo_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceThree_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "address",
-          "name": "betMaster_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint8",
-          "name": "numOfChoices_",
-          "indexed": false,
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETCREATED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "deadline_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "privateOrPublic",
-          "indexed": false,
-          "internalType": "uint8"
-        },
-        {
-          "type": "string",
-          "name": "name_",
-          "indexed": false,
-          "internalType": "string"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceOne_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceTwo_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceThree_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "choiceFour_",
-          "indexed": false,
-          "internalType": "bytes32"
-        },
-        {
-          "type": "address",
-          "name": "betMaster_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint8",
-          "name": "numOfChoices_",
-          "indexed": false,
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETEXECUTED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "correctChoice_",
-          "indexed": false,
-          "internalType": "uint8"
-        },
-        {
-          "type": "bool",
-          "name": "executed_",
-          "indexed": false,
-          "internalType": "bool"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETMASTERPAYOUTCLAIMED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "profit_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "address",
-          "name": "betMaster_",
-          "indexed": false,
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETPLACED",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "pundit_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "choice_",
-          "indexed": false,
-          "internalType": "enum BoardMan.Choices"
-        },
-        {
-          "type": "uint256",
-          "name": "amount_",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "BETPLACED",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "pundit_",
-          "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "amount_",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "previousOwner",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "type": "address",
-          "name": "newOwner",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "PAYOUTCLAIMED",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "betId_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "amount_",
-          "indexed": false,
-          "internalType": "uint256"
-        },
-        {
-          "type": "address",
-          "name": "pundit_",
-          "indexed": false,
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "fallback",
-      "name": "",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "IntegrityScore",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint8",
-          "name": "",
-          "internalType": "uint8"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "PPaddCorrectChoice",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "_correctChoice",
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "acceptChallenge",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "betEvents",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "tuple",
-          "name": "init",
-          "components": [
-            {
-              "type": "uint256",
-              "name": "betId",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "deadline",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "creationFee",
-              "internalType": "uint256"
-            },
-            {
-              "type": "string",
-              "name": "name",
-              "internalType": "string"
-            },
-            {
-              "type": "address",
-              "name": "betMaster",
-              "internalType": "address"
-            },
-            {
-              "type": "uint8",
-              "name": "numOfChoices",
-              "internalType": "uint8"
-            }
-          ],
-          "internalType": "struct BoardMan.INIT"
-        },
-        {
-          "type": "tuple",
-          "name": "choiceOne",
-          "components": [
-            {
-              "type": "bytes32",
-              "name": "choiceOne_",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "uint32",
-              "name": "choiceOneNoB",
-              "internalType": "uint32"
-            },
-            {
-              "type": "uint256",
-              "name": "choiceOneAmount",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "oddOne",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "finalOddOne",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.ChoiceOne"
-        },
-        {
-          "type": "tuple",
-          "name": "choiceTwo",
-          "components": [
-            {
-              "type": "bytes32",
-              "name": "choiceTwo_",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "uint32",
-              "name": "choiceTwoNoB",
-              "internalType": "uint32"
-            },
-            {
-              "type": "uint256",
-              "name": "choiceTwoAmount",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "oddTwo",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "finalOddTwo",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.ChoiceTwo"
-        },
-        {
-          "type": "tuple",
-          "name": "choiceThree",
-          "components": [
-            {
-              "type": "bytes32",
-              "name": "choiceThree_",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "uint32",
-              "name": "choiceThreeNoB",
-              "internalType": "uint32"
-            },
-            {
-              "type": "uint256",
-              "name": "choiceThreeAmount",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "oddThree",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "finalOddThree",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.ChoiceThree"
-        },
-        {
-          "type": "tuple",
-          "name": "choiceFour",
-          "components": [
-            {
-              "type": "bytes32",
-              "name": "choiceFour_",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "uint32",
-              "name": "choiceFourNoB",
-              "internalType": "uint32"
-            },
-            {
-              "type": "uint256",
-              "name": "choiceFourAmount",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "oddFour",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "finalOddFour",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.ChoiceFour"
-        },
-        {
-          "type": "tuple",
-          "name": "totals",
-          "components": [
-            {
-              "type": "uint256",
-              "name": "totalAmountCorrectChoice",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "totalNumberOfBetsCorrectChoice",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "totalBets",
-              "internalType": "uint256"
-            },
-            {
-              "type": "uint256",
-              "name": "totalAmount",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.Totals"
-        },
-        {
-          "type": "tuple",
-          "name": "privorpub",
-          "components": [
-            {
-              "type": "uint8",
-              "name": "privateOrPublic",
-              "internalType": "uint8"
-            },
-            {
-              "type": "bool",
-              "name": "active",
-              "internalType": "bool"
-            },
-            {
-              "type": "bool",
-              "name": "challengeAccepted",
-              "internalType": "bool"
-            },
-            {
-              "type": "address",
-              "name": "winner",
-              "internalType": "address"
-            },
-            {
-              "type": "address",
-              "name": "privateBetOpponent",
-              "internalType": "address"
-            },
-            {
-              "type": "bytes32",
-              "name": "PP_yourChoice",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "bytes32",
-              "name": "PP_opponentsChoice",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "bytes32",
-              "name": "PP_correctChoice",
-              "internalType": "bytes32"
-            },
-            {
-              "type": "uint256",
-              "name": "PP_amount",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.PRIVORPUB"
-        },
-        {
-          "type": "tuple",
-          "name": "finalize",
-          "components": [
-            {
-              "type": "uint8",
-              "name": "correctChoice",
-              "internalType": "uint8"
-            },
-            {
-              "type": "bool",
-              "name": "finalOddsUpdated",
-              "internalType": "bool"
-            },
-            {
-              "type": "bool",
-              "name": "executed",
-              "internalType": "bool"
-            },
-            {
-              "type": "uint256",
-              "name": "datetimeExecuted",
-              "internalType": "uint256"
-            }
-          ],
-          "internalType": "struct BoardMan.FINALIZE"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "checkIfBetMaster",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bool",
-          "name": "",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "claimBetMaster",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bool",
-          "name": "success",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "claimPayout",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bool",
-          "name": "success",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "createBetEvent",
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_name",
-          "internalType": "string"
-        },
-        {
-          "type": "uint256",
-          "name": "_deadline",
-          "internalType": "uint256"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceOne",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceTwo",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceThree",
-          "internalType": "bytes32"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "createBetEvent",
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_name",
-          "internalType": "string"
-        },
-        {
-          "type": "uint256",
-          "name": "_deadline",
-          "internalType": "uint256"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceOne",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceTwo",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceThree",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceFour",
-          "internalType": "bytes32"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "createBetEvent",
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_name",
-          "internalType": "string"
-        },
-        {
-          "type": "uint256",
-          "name": "_deadline",
-          "internalType": "uint256"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceOne",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_choiceTwo",
-          "internalType": "bytes32"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "createPrivateBetEvent",
-      "inputs": [
-        {
-          "type": "string",
-          "name": "_name",
-          "internalType": "string"
-        },
-        {
-          "type": "uint256",
-          "name": "_deadline",
-          "internalType": "uint256"
-        },
-        {
-          "type": "address",
-          "name": "_opponent",
-          "internalType": "address"
-        },
-        {
-          "type": "bytes32",
-          "name": "_yourChoice",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "bytes32",
-          "name": "_otherChoice",
-          "internalType": "bytes32"
-        },
-        {
-          "type": "uint256",
-          "name": "_amount",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "executeBetEvent",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "_correctChoice",
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bool",
-          "name": "success",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "finalOdds",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "odds1",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "odds2",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "odds3",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "odds4",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "getStageOneOdds",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "integrity",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "_defaulter",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "numBetEvents",
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "address",
-          "name": "",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "placeBet",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint8",
-          "name": "choice_",
-          "internalType": "enum BoardMan.Choices"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bool",
-          "name": "success",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "payable"
-    },
-    {
-      "type": "function",
-      "name": "recallChallenge",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
-        {
-          "type": "address",
-          "name": "newOwner",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "viewBetEventFee",
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "viewBetMaster",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "address",
-          "name": "",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "viewCorrectChoice",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint8",
-          "name": "correctChoice",
-          "internalType": "uint8"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "viewFinalOdds",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "finalOdd1",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "finalOdd2",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "finalOdd3",
-          "internalType": "uint256"
-        },
-        {
-          "type": "uint256",
-          "name": "finalOdd4",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "viewMinBetFee",
-      "inputs": [],
-      "outputs": [
-        {
-          "type": "uint256",
-          "name": "",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "viewPPCorrectChoice",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "bytes32",
-          "name": "",
-          "internalType": "bytes32"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "winnerTakesAll",
-      "inputs": [
-        {
-          "type": "uint256",
-          "name": "_betId",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "withdrawEther",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "receive",
-      "name": "",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "payable"
-    }
-  ]
+  {
+    "type": "constructor",
+    "name": "",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_createBetEventFee",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "_minBetFee",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "event",
+    "name": "BETCREATED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "deadline_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "privateOrPublic_",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "type": "string",
+        "name": "name_",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceOne_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceTwo_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "address",
+        "name": "betMaster_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "opponentAddress_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "amount_",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETCREATED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "deadline_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "privateOrPublic_",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "type": "string",
+        "name": "name_",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceOne_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceTwo_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "address",
+        "name": "betMaster_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint8",
+        "name": "numOfChoices_",
+        "indexed": false,
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETCREATED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "deadline_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "privateOrPublic",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "type": "string",
+        "name": "name_",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceOne_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceTwo_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceThree_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "address",
+        "name": "betMaster_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint8",
+        "name": "numOfChoices_",
+        "indexed": false,
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETCREATED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "deadline_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "privateOrPublic",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "type": "string",
+        "name": "name_",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceOne_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceTwo_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceThree_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "choiceFour_",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "type": "address",
+        "name": "betMaster_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint8",
+        "name": "numOfChoices_",
+        "indexed": false,
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETEXECUTED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "correctChoice_",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "type": "bool",
+        "name": "executed_",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETMASTERPAYOUTCLAIMED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "profit_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "betMaster_",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETPLACED",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "pundit_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "choice_",
+        "indexed": false,
+        "internalType": "enum BoardMan.Choices"
+      },
+      {
+        "type": "uint256",
+        "name": "amount_",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BETPLACED",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "pundit_",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "amount_",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "previousOwner",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "type": "address",
+        "name": "newOwner",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PAYOUTCLAIMED",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "betId_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "amount_",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "pundit_",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "anonymous": false
+  },
+  {
+    "type": "fallback",
+    "name": "",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "IntegrityScore",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint8",
+        "name": "",
+        "internalType": "uint8"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "PPaddCorrectChoice",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "_correctChoice",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "acceptChallenge",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "betEvents",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "tuple",
+        "name": "init",
+        "components": [
+          {
+            "type": "uint256",
+            "name": "betId",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "deadline",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "creationFee",
+            "internalType": "uint256"
+          },
+          {
+            "type": "string",
+            "name": "name",
+            "internalType": "string"
+          },
+          {
+            "type": "address",
+            "name": "betMaster",
+            "internalType": "address"
+          },
+          {
+            "type": "uint8",
+            "name": "numOfChoices",
+            "internalType": "uint8"
+          }
+        ],
+        "internalType": "struct BoardMan.INIT"
+      },
+      {
+        "type": "tuple",
+        "name": "choiceOne",
+        "components": [
+          {
+            "type": "bytes32",
+            "name": "choiceOne_",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint32",
+            "name": "choiceOneNoB",
+            "internalType": "uint32"
+          },
+          {
+            "type": "uint256",
+            "name": "choiceOneAmount",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "oddOne",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "finalOddOne",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.ChoiceOne"
+      },
+      {
+        "type": "tuple",
+        "name": "choiceTwo",
+        "components": [
+          {
+            "type": "bytes32",
+            "name": "choiceTwo_",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint32",
+            "name": "choiceTwoNoB",
+            "internalType": "uint32"
+          },
+          {
+            "type": "uint256",
+            "name": "choiceTwoAmount",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "oddTwo",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "finalOddTwo",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.ChoiceTwo"
+      },
+      {
+        "type": "tuple",
+        "name": "choiceThree",
+        "components": [
+          {
+            "type": "bytes32",
+            "name": "choiceThree_",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint32",
+            "name": "choiceThreeNoB",
+            "internalType": "uint32"
+          },
+          {
+            "type": "uint256",
+            "name": "choiceThreeAmount",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "oddThree",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "finalOddThree",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.ChoiceThree"
+      },
+      {
+        "type": "tuple",
+        "name": "choiceFour",
+        "components": [
+          {
+            "type": "bytes32",
+            "name": "choiceFour_",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint32",
+            "name": "choiceFourNoB",
+            "internalType": "uint32"
+          },
+          {
+            "type": "uint256",
+            "name": "choiceFourAmount",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "oddFour",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "finalOddFour",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.ChoiceFour"
+      },
+      {
+        "type": "tuple",
+        "name": "totals",
+        "components": [
+          {
+            "type": "uint256",
+            "name": "totalAmountCorrectChoice",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "totalNumberOfBetsCorrectChoice",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "totalBets",
+            "internalType": "uint256"
+          },
+          {
+            "type": "uint256",
+            "name": "totalAmount",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.Totals"
+      },
+      {
+        "type": "tuple",
+        "name": "privorpub",
+        "components": [
+          {
+            "type": "uint8",
+            "name": "privateOrPublic",
+            "internalType": "uint8"
+          },
+          {
+            "type": "bool",
+            "name": "active",
+            "internalType": "bool"
+          },
+          {
+            "type": "bool",
+            "name": "challengeAccepted",
+            "internalType": "bool"
+          },
+          {
+            "type": "address",
+            "name": "winner",
+            "internalType": "address"
+          },
+          {
+            "type": "address",
+            "name": "privateBetOpponent",
+            "internalType": "address"
+          },
+          {
+            "type": "bytes32",
+            "name": "PP_yourChoice",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "bytes32",
+            "name": "PP_opponentsChoice",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "bytes32",
+            "name": "PP_correctChoice",
+            "internalType": "bytes32"
+          },
+          {
+            "type": "uint256",
+            "name": "PP_amount",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.PRIVORPUB"
+      },
+      {
+        "type": "tuple",
+        "name": "finalize",
+        "components": [
+          {
+            "type": "uint8",
+            "name": "correctChoice",
+            "internalType": "uint8"
+          },
+          {
+            "type": "bool",
+            "name": "executed",
+            "internalType": "bool"
+          },
+          {
+            "type": "uint256",
+            "name": "datetimeExecuted",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct BoardMan.FINALIZE"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkIfBetMaster",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "claimBetMaster",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "success",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "claimPayout",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "success",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createBetEventFour",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_name",
+        "internalType": "string"
+      },
+      {
+        "type": "uint256",
+        "name": "_deadline",
+        "internalType": "uint256"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceOne",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceTwo",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceThree",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceFour",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "createBetEventThree",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_name",
+        "internalType": "string"
+      },
+      {
+        "type": "uint256",
+        "name": "_deadline",
+        "internalType": "uint256"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceOne",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceTwo",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceThree",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "createBetEventTwo",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_name",
+        "internalType": "string"
+      },
+      {
+        "type": "uint256",
+        "name": "_deadline",
+        "internalType": "uint256"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceOne",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceTwo",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "createPrivateBetEvent",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_name",
+        "internalType": "string"
+      },
+      {
+        "type": "uint256",
+        "name": "_deadline",
+        "internalType": "uint256"
+      },
+      {
+        "type": "address",
+        "name": "_opponent",
+        "internalType": "address"
+      },
+      {
+        "type": "bytes32",
+        "name": "_yourChoice",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_otherChoice",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "uint256",
+        "name": "_amount",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "executeBetEvent",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "_correctChoice",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "success",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "finalOdds",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "odds1",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "odds2",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "odds3",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "odds4",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getStageOneOdds",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "integrity",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_defaulter",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "numBetEvents",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "placeBet",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint8",
+        "name": "choice_",
+        "internalType": "enum BoardMan.Choices"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bool",
+        "name": "success",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "recallChallenge",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "newOwner",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "viewBetEventFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "viewBetMaster",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "address",
+        "name": "",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "viewCorrectChoice",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint8",
+        "name": "correctChoice",
+        "internalType": "uint8"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "viewFinalOdds",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "finalOdd1",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "finalOdd2",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "finalOdd3",
+        "internalType": "uint256"
+      },
+      {
+        "type": "uint256",
+        "name": "finalOdd4",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "viewMinBetFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "viewPPCorrectChoice",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "bytes32",
+        "name": "",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "winnerTakesAll",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_betId",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawEther",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "receive",
+    "name": "",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  }
+]

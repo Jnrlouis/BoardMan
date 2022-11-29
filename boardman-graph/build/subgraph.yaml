@@ -6,9 +6,9 @@ dataSources:
     name: BoardMan
     network: mumbai
     source:
-      address: "0xb185D40c24fa75Bc43910cbb9a8A5C141E0d2995"
+      address: "0xc750a7EDA17422D4BDF23F6Cc742BAE8Df2f8Fd0"
       abi: BoardMan
-      startBlock: 29264823
+      startBlock: 29374056
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -29,7 +29,7 @@ dataSources:
           file: BoardMan\abis\BoardMan.json
       eventHandlers:
         - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,address,address,uint256)
-          handler: handleBETCREATED
+          handler: handlePRIVATEBETCREATED
         - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,address,uint8)
           handler: handleBETCREATED1
         - event: BETCREATED(uint256,uint256,uint8,string,bytes32,bytes32,bytes32,address,uint8)

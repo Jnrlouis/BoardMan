@@ -1,6 +1,8 @@
 import { utils } from "ethers";
 import { getBoardManContractInstance } from "./utils/getBoardManContractInstance";
-  
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceTwo, nameChoiceThree, nameChoiceFour, deadline) => {
     try {
         const amount = utils.parseEther("5");
@@ -12,7 +14,7 @@ export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceT
         const contract = getBoardManContractInstance(signer);
 
         if (nameChoiceOne == "" || nameChoiceTwo == "") {
-          alert("First or Second Outcomes cannot be empty!");
+          toast.warning("First or Second Outcomes cannot be empty!");
         }
         if (nameChoiceOne !== "" && nameChoiceTwo !== "" && 
           nameChoiceFour == "" && nameChoiceThree !== "") {
@@ -20,7 +22,7 @@ export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceT
               nameChoiceOneBytes, nameChoiceTwoBytes, nameChoiceThreeBytes, {value: amount});
             // setLoading(true);
               console.info("contract call successs", data);
-              alert("Bet Event Created!!");
+              toast.success("Bet Event Created");
             // setLoading(false);
           }
         if (nameChoiceOne !== "" && nameChoiceTwo !== "" &&
@@ -29,7 +31,7 @@ export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceT
               nameChoiceOneBytes, nameChoiceTwoBytes, {value: amount});
             // setLoading(true);
               console.info("contract call successs", data);
-              alert("Bet Event Created!!");
+              toast.success("Bet Event Created");
             // setLoading(false);
           }
         if (nameChoiceOne !== "" && nameChoiceTwo !== "" &&
@@ -38,12 +40,13 @@ export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceT
               nameChoiceOneBytes, nameChoiceTwoBytes, nameChoiceThreeBytes, nameChoiceFourBytes, {value: amount});
             // setLoading(true);
               console.info("contract call successs", data);
-              alert("Bet Event Created!!");
+              toast.success("Bet Event Created");
             // setLoading(false);
           }
         
     } catch (err) {
         console.error("contract call failure", err);
+        toast.error("An Error occured")
         // setLoading(false);
     }
   };
@@ -57,18 +60,19 @@ export const createBet = async (signer, nameBetEvent, nameChoiceOne, nameChoiceT
         const contract = getBoardManContractInstance(signer);
 
         if (nameChoiceOne == "" || nameChoiceTwo == "" || opponentAddress == "") {
-          alert("Outcomes or Opponent Address cannot be empty!");
+          toast.warning("Outcomes or Opponent Address cannot be empty");
         }
         const data = await contract.createPrivateBetEvent( nameBetEvent.toString(), unixDeadline,
           opponentAddress.toString(), 
           nameChoiceOneBytes, nameChoiceTwoBytes, amount, {value: amount});
         // setLoading(true);
           console.info("contract call successs", data);
-          alert("Bet Event Created!!");
+          toast.success("Bet Event Created");
         // setLoading(false);
         
     } catch (err) {
         console.error("contract call failure", err);
+        toast.error("An Error occurred")
         // setLoading(false);
     }
   };

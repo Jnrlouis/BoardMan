@@ -8,8 +8,12 @@ import { getProviderOrSigner } from "../connector/utils/getProviderOrSigner";
 import { FaMoneyBill } from "react-icons/fa";
 import { AiOutlineMoneyCollect } from "react-icons/ai";
 
+
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const CreateBet = (props) => {
-  // const [state, setState] = useState(false);
+
   const [pinstate, setPinstate] = useState("pick");
 
   const [nameBetEvent, setNameBetEvent] = useState("");
@@ -33,6 +37,7 @@ const CreateBet = (props) => {
 
   const wrapperRef = useRef(null);
   const web3ModalRef = useRef();
+
 
   const renderState = () => {
     let state;
@@ -85,13 +90,6 @@ const CreateBet = (props) => {
     setDetailsModal("modal-container__target");
   };
 
-  // useEffect(() => {
-  //   if (attributeValues.length >= 2) {
-  //     setState(true);
-  //   } else {
-  //     setState(false);
-  //   }
-  // }, [attributeValues]);
 
   const createBetContract = async() => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
@@ -111,6 +109,7 @@ const CreateBet = (props) => {
   const navigate = useNavigate();
   return (
     <div className="createBet__container">
+      <ToastContainer/>
       <div className="createBet__box">
         <h1>CREATE YOUR BET</h1>
         <div ref={wrapperRef} className="drop-file-input">
@@ -302,9 +301,7 @@ const CreateBet = (props) => {
                 </div>
               ) : null}
               <div
-                // onClick={() => {
-                //   setNftModal("modal-container");
-                // }}
+               
                 className="add__attributes"
               >
                 <div className="add__link">
@@ -329,53 +326,26 @@ const CreateBet = (props) => {
           </form>
         ) : null}
       </div>
-      {/* <div className={nftModal}>
-        <section class="modal">
-          <header class="modal-header">
-            <div className="modal__info">
-              <h2 class="modal-title">Add Options:</h2>
-              <p>
-                <i>
-                  Note: Minimum of 2 options and <br /> maximum of 4 options
-                </i>
-              </p>
-            </div>
 
-            <span
-              onClick={() => {
-                setNftModal("modal-container__target");
-              }}
-              class="modal-close"
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+
+
+      <div className="enterbutton__div__heroarea">
+            
+            <button
+              onClick={() => navigate("/bets")}
+              className="enter__button"
             >
-              Close
-            </span>
-          </header>
-          <div class="modal-content">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendAttributeValue();
-              }}
-              className="attribute__div"
-            >
-              <div className="attribute__input">
-                <input
-                  type="text"
-                  required
-                  placeholder="Add Event Option"
-                  value={inputValueAttribute}
-                  onChange={onInputChangeAttribute}
-                  className="attribute__input__name"
-                />
-              </div>
-              <div className="attribute__button__div">
-                <button className="attribute__button">Add</button>
-              </div>
-            </form>
-          </div>
-        </section>
-      </div> */}
-      <div className="nft__div">
+              <span className="button__text">View Bet</span>
+            </button>
+      </div>
+      
+      {/* <div className="nft__div">
         <h1 className="nft__h1">My Bets</h1>
 
         <div className="t__cards">
@@ -586,7 +556,7 @@ const CreateBet = (props) => {
             </form>
           </div>
         </section>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getNumBets } from "../connector/utils/getNumBets";
-import { fetchAllBets, getChallengeAccepted, checkActive, checkExecuted} from "../connector/utils/utils";
-// import Web3Modal from "web3modal";
-// import { providers } from "ethers";
+import { fetchAllBets, fetchAllMyBets, getChallengeAccepted, checkActive, checkExecuted} from "../connector/utils/utils";
+
 import { motion } from "framer-motion";
 import "./styles/Bets.css";
 import { BsFillPersonFill, BsPlayBtn, BsSearch } from "react-icons/bs";
@@ -16,6 +15,9 @@ import {executeBet, executePrivateBet} from "../connector/executeBet.Conn.js";
 import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import Loader from "../constants/Loader/Loader";
 import { useAccount } from "wagmi";
+
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Bets = () => {
   const [betstate, setBetState] = useState("");
@@ -31,6 +33,7 @@ const Bets = () => {
   const [correctChoice, setCorrectChoice] = useState("0");
   const [usersChoice, setUsersChoice] = useState("0");
   const [bets, setBets] = useState([]);
+  const [myBets, setMyBets] = useState([]);
   const [betStake, setBetStake] = useState("0");
   const [betDetails, setBetDetails] = useState([]);
   const web3ModalRef = useRef();
@@ -41,7 +44,8 @@ const Bets = () => {
 
   useEffect(() => {
     fetchAllBetsById();
-  }, []);
+    fetchAllMyBetsById();
+  }, [address]);
 
   const getBets = async () => {
     const provider = await getProviderOrSigner(web3ModalRef);
@@ -55,6 +59,18 @@ const Bets = () => {
       const allBets = await fetchAllBets(provider);
       setBets(allBets);
     } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const fetchAllMyBetsById = async () => {
+    try {
+      const provider = await getProviderOrSigner(web3ModalRef);
+      const myBet = await fetchAllMyBets(provider, address);
+      setMyBets(myBet);
+    } catch (error) {
+      toast.error(error);
       console.log(error);
     }
   };
@@ -67,9 +83,6 @@ const Bets = () => {
 
   const placeBetContract = async(_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
-    console.log("User Choice: ", usersChoice);
-    console.log("Bet Stake: ", betStake);
-    console.log("Bet Id: ", _betId.toString());
     await placeBet(signer, _betId.toString(), usersChoice, betStake);
   }
 
@@ -78,7 +91,7 @@ const Bets = () => {
     const accepted = await getChallengeAccepted(signer, _betId);
     console.log("Accepted?: ", accepted);
     if (accepted) {
-      alert("Challenge Already Accepted");
+      toast.warning("Challenge Already Accepted");
     } else {
       await acceptChallenge(signer, _betId.toString());
     }
@@ -89,11 +102,10 @@ const Bets = () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     const isActive = await checkActive(signer, _betId);
-    console.log("Accepted?: ", accepted);
     if (accepted) {
-      alert("Challenge Already Accepted");
+      toast.warning("Challenge Already Accepted");
     } else if (!isActive) {
-      alert("Bet Event Inactive")
+      toast.warning("Bet Event Inactive");
     } else{
       await recallChallenge(signer, _betId.toString());
     }
@@ -109,7 +121,7 @@ const Bets = () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     if (!accepted) {
-      alert("Challenge was not accepted")
+      toast.warning("Challenge was not accepted")
     } else {
       await executePrivateBet(signer, _betId, correctChoice);
     }  
@@ -119,7 +131,7 @@ const Bets = () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      alert("Not Executed")
+      toast.warning("Bet Event NOT Executed")
     } else {
       await claimPayout(signer, _betId);
     }  
@@ -129,7 +141,7 @@ const Bets = () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      alert("Not Executed")
+      toast.warning("Bet Event NOT Executed")
     } else {
       await claimPayoutBetMaster(signer, _betId);
     }  
@@ -141,11 +153,11 @@ const Bets = () => {
     const isActive = await checkActive(signer, _betId);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      alert("Not Executed")
+      toast.warning("Bet Event NOT Executed")
     } else if (!accepted) {
-      alert("Challenge was not accepted")
+      toast.warning("Challenge was not accepted")
     } else if (!isActive) {
-      alert("Bet Event Inactive")
+      toast.warning("Bet Event Inactive")
     } else {
       await claimPayoutPrivate(signer, _betId);
     }  
@@ -220,6 +232,7 @@ const Bets = () => {
   };
   return (
     <div className="bets__container">
+      <ToastContainer/>
       <div className="bets__header">
         <h1 className="bets__h1">Available Bets</h1>
         <p className="bets__p">Here are all the Pending Bets</p>
@@ -349,7 +362,7 @@ const Bets = () => {
               className="attribute__div"
             >
               <>
-                {betDetails.reverse().map((p, index) => (
+                {betDetails.map((p, index) => (
                   <div key={index}>
                     <div className="attribute__input">
                       {p.betType == 0 ?
@@ -529,52 +542,178 @@ const Bets = () => {
             transition={{ duration: 0.5 }}
             className="table__container__history"
           >
-            <div className="nft__div">
-              <h1 className="nft__h1">My Bets</h1>
-
-              <div className="t__cards">
-                <div className="t__card">
-                  <div className="t__left">
-                    <div className="t__left__info">
-                      <div className="subject">Players:</div>
-                      <div className="value">122</div>
-                    </div>
-                    <div className="t__left__info">
-                      <div className="subject">Executed:</div>
-                      <div className="value">False</div>
-                    </div>
-                    <div className="t__left__info">
-                      <div className="subject">
-                        Id: <span>#012</span>
+            <div className="t__cards">
+            {myBets.length > 0 ? (
+              <>
+                {myBets.map((p, index) => (
+                  <div key={index} className="t__card">
+                    <div className="t__left">
+                      <div className="t__left__info">
+                        <div className="subject">
+                          <span>#{p.betId}</span>
+                        </div>
                       </div>
-                      <div className="value1">
-                        <FaMoneyBill />
-                        <p>45MATIC</p>
+                      <div className="t__left__info">
+                        <div className="subject">
+                          {p.betType == 0 ? (
+                            <div className="value">
+                              {p.totalNOB}
+                              <BsFillPersonFill className="person" />
+                            </div>
+                          ) : p.challengeAccepted.toString() == "false" ? (
+                            <div className="value">
+                              {1}
+                              <BsFillPersonFill className="person" />
+                            </div>
+                          ) : (
+                            <div className="value">
+                              {2} <BsFillPersonFill className="person" />
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      <div className="t__left__info">
+                        <div className="subject">
+                          {" "}
+                          <div className={
+                            p.betType == 0 ?
+                            (p.executed  ? " red" : " green") :
+                            (!p.active ? " red" : " green")}>
+                            
+                            {
+                            p.betType == 0 ?
+                            (p.executed ? "CLOSED" : "OPEN") :
+                            (!p.active ? "CLOSED" : "OPEN")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="t__left__info">
+                        <div className="subject">
+                          <div className="value1">
+                            <div className="value1">
+                              <FaMoneyBill className="money" />
+                              <p>
+                                {p.betType == 0
+                                  ? parseFloat(p.totalAmountBet).toFixed(3)
+                                  : p.betAmount}{" "}
+                                Matic
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="t__center">
+                      {p.betType == 0 ? (
+                        <IoIosPeople className="state__logo" />
+                      ) : (
+                        <IoMdPeople className="state__logo" />
+                      )}
+                    </div>
+                    <div className="t__right">
+                      <p>{p.betType == 0 ? "Public" : "Private"}</p>
+                      <button
+                        className="btn1"
+                        onClick={() => {
+                          setDetailsModal("modal-container");
+                          fetchBetsById(p.betId);
+                        }}
+                      >
+                        Details
+                      </button>
+                      {p.betMaster == address ? (
+                        <button
+                          className="btn2"
+                          onClick={() => {
+                            if (p.deadline.getTime() < Date.now() && !p.executed) {
+                              setUpdateModal("modal-container");
+                              fetchBetsById(p.betId);
+                            } else if (p.deadline.getTime() < Date.now() && p.executed) {
+                              toast.warning("Bet Already Executed");
+                            } 
+                            
+                            else {
+                              toast.warning("Bet DeadLine has not reached");
+                            }
+                          }}
+                        >
+                          Update
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            if (p.deadline.getTime() > Date.now()) {
+                              setEnterModal("modal-container");
+                              fetchBetsById(p.betId);
+                            } else {
+                              toast.warning("Bet DeadLine Reached");
+                            }
+                          }}
+                          className="btn2"
+                        >
+                          Enter
+                        </button>
+                      )}
+                      {
+                        p.betType == 1 ? 
+                          address == p.betMaster ?
+                        (
+                          <button
+                            className="btn2"
+                            onClick={() => {
+                              recallChallengeContract(p.betId);
+                            }}
+                          >
+                            Recall
+                          </button>
+                        ) : "" : ""
+                      }
+                      {
+                        p.executed ? 
+                          p.betType == 0 ? (
+                            address == p.betMaster ?
+                            (
+                              <button
+                                className="btn2"
+                                onClick={() => {
+                                  claimPayoutBetMasterContract(p.betId);
+                                }}
+                              >
+                                Claim
+                              </button>
+                            ) :
+                            (
+                              <button
+                                className="btn2"
+                                onClick={() => {
+                                  claimPayoutContract(p.betId);
+                                }}
+                              >
+                                Claim
+                              </button>
+                            )
+                          ) :
+                          (
+                            <button
+                              className="btn2"
+                              onClick={() => {
+                                claimPayoutPrivateContract(p.betId);
+                              }}
+                            >
+                              Claim
+                            </button>
+                          ) : ""
+                        
+                      }
+                      
                     </div>
                   </div>
-                  <div className="t__right">
-                    <p>3 hours</p>
-                    <button
-                      className="btn1"
-                      onClick={() => {
-                        setDetailsModal("modal-container");
-                      }}
-                    >
-                      Details
-                    </button>
-                    <button
-                      className="btn2"
-                      onClick={() => {
-                        setUpdateModal("modal-container");
-                      }}
-                    >
-                      Update
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                ))}
+              </>
+            ) : (
+              <h1 className="nft__h1">No Bets Created... yet!</h1>
+            )}
+          </div>
           </motion.div>
         </>
       ) : (
@@ -674,11 +813,11 @@ const Bets = () => {
                               setUpdateModal("modal-container");
                               fetchBetsById(p.betId);
                             } else if (p.deadline.getTime() < Date.now() && p.executed) {
-                              alert("Bet Already Executed");
+                              toast.warning("Bet Already Executed");
                             } 
                             
                             else {
-                              alert("Bet DeadLine has not reached");
+                              toast.warning("Bet DeadLine has not reached");
                             }
                           }}
                         >
@@ -691,7 +830,7 @@ const Bets = () => {
                               setEnterModal("modal-container");
                               fetchBetsById(p.betId);
                             } else {
-                              alert("Bet DeadLine Reached");
+                              toast.warning("Bet DeadLine Reached");
                             }
                           }}
                           className="btn2"
@@ -700,7 +839,9 @@ const Bets = () => {
                         </button>
                       )}
                       {
-                        p.betType == 1 ? (
+                        p.betType == 1 ? 
+                          address == p.betMaster ?
+                        (
                           <button
                             className="btn2"
                             onClick={() => {
@@ -709,7 +850,7 @@ const Bets = () => {
                           >
                             Recall
                           </button>
-                        ) : ""
+                        ) : "" : ""
                       }
                       {
                         p.executed ? 
@@ -793,7 +934,7 @@ const Bets = () => {
               className="attribute__div"
             >
               <>
-                {betDetails.reverse().map((p, index) => (
+                {betDetails.map((p, index) => (
                   <div key={index}>
                     <div className="attribute__input">
                       {p.betType == 0 ?
@@ -1022,7 +1163,7 @@ const Bets = () => {
               className="attribute__div"
             >
               <>
-                {betDetails.reverse().map((p, index) => (
+                {betDetails.map((p, index) => (
                   <div key={index}>
                     <div className="attribute__input">
                       <div className="details__info">
@@ -1193,11 +1334,16 @@ const Bets = () => {
                             <div className="details__values">
                               <p>Correct Outcome:</p>
                               <p className="value">
-                                {p.privateCorrChoice == 0
-                                    ? "N/A"
-                                    : p.corrChoice == 1
-                                    ? p.privateFirstChoice
-                                    : p.privateSecondChoice
+                                {p.privateCorrChoice}
+                              </p>
+                            </div>
+
+                            <div className="details__values">
+                              <p>Winner:</p>
+                              <p className="value">
+                                {p.privateCorrChoice == p.privateFirstChoice ? 
+                                  p.betMaster : (p.privateCorrChoice == p.privateSecondChoice ?
+                                  p.opponentAddress : "N/A")
                                 }
                               </p>
                             </div>

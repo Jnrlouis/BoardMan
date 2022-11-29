@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = "0x36D842bDAE51553d27e12768E6F6f203032b1939";
+export const CONTRACT_ADDRESS = "0xc750a7EDA17422D4BDF23F6Cc742BAE8Df2f8Fd0";
 
 export const ABI = 
 [
@@ -744,11 +744,6 @@ export const ABI =
             "type": "uint8",
             "name": "correctChoice",
             "internalType": "uint8"
-          },
-          {
-            "type": "bool",
-            "name": "finalOddsUpdated",
-            "internalType": "bool"
           },
           {
             "type": "bool",

@@ -744,11 +744,6 @@
           },
           {
             "type": "bool",
-            "name": "finalOddsUpdated",
-            "internalType": "bool"
-          },
-          {
-            "type": "bool",
             "name": "executed",
             "internalType": "bool"
           },
@@ -822,46 +817,7 @@
   },
   {
     "type": "function",
-    "name": "createBetEvent",
-    "inputs": [
-      {
-        "type": "string",
-        "name": "_name",
-        "internalType": "string"
-      },
-      {
-        "type": "uint256",
-        "name": "_deadline",
-        "internalType": "uint256"
-      },
-      {
-        "type": "bytes32",
-        "name": "_choiceOne",
-        "internalType": "bytes32"
-      },
-      {
-        "type": "bytes32",
-        "name": "_choiceTwo",
-        "internalType": "bytes32"
-      },
-      {
-        "type": "bytes32",
-        "name": "_choiceThree",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "uint256",
-        "name": "",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "createBetEvent",
+    "name": "createBetEventFour",
     "inputs": [
       {
         "type": "string",
@@ -905,7 +861,46 @@
   },
   {
     "type": "function",
-    "name": "createBetEvent",
+    "name": "createBetEventThree",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_name",
+        "internalType": "string"
+      },
+      {
+        "type": "uint256",
+        "name": "_deadline",
+        "internalType": "uint256"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceOne",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceTwo",
+        "internalType": "bytes32"
+      },
+      {
+        "type": "bytes32",
+        "name": "_choiceThree",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "createBetEventTwo",
     "inputs": [
       {
         "type": "string",

@@ -1,4 +1,6 @@
 import { getBoardManContractInstance } from "./utils/getBoardManContractInstance";
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const claimPayout = async (signer, _betId) => {
     try {
@@ -7,10 +9,10 @@ export const claimPayout = async (signer, _betId) => {
     //   setLoading(true);
       await payout.wait();
     //   setLoading(false);
-   
+      toast.success("Payout claimed successfully");
     } catch (error) {
     //   setLoading(false);
-      window.alert(error.message);
+      toast.error(error.message);
       console.log(error)
     }
 }
@@ -22,10 +24,10 @@ export const claimPayoutBetMaster = async (signer, _betId) => {
   //   setLoading(true);
     await payout.wait();
   //   setLoading(false);
- 
+    toast.success("Payout claimed successfully");
   } catch (error) {
   //   setLoading(false);
-    window.alert(error.message);
+    toast.error(error.message);
     console.log(error)
   }
 }
@@ -37,10 +39,10 @@ export const claimPayoutPrivate = async (signer, _betId) => {
   //   setLoading(true);
     await payout.wait();
   //   setLoading(false);
- 
+    toast.success("Payout claimed successfully");
   } catch (error) {
   //   setLoading(false);
-    window.alert(error.message);
+    toast.error(error.message);
     console.log(error)
   }
 }

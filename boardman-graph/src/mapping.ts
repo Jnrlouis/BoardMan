@@ -50,6 +50,7 @@ export function handleBETCREATED1(event: BETCREATED1): void {
 
   // Entity fields can be set based on event parameters
   entity.name = event.params.name_;
+  entity.privateOrPublic = event.params.privateOrPublic_;
   entity.deadline = event.params.deadline_;
   entity.choiceOne = event.params.choiceOne_;
   entity.choiceTwo = event.params.choiceTwo_;
@@ -70,6 +71,7 @@ export function handleBETCREATED2(event: BETCREATED2): void {
 
   // Entity fields can be set based on event parameters
   entity.name = event.params.name_;
+  entity.privateOrPublic = event.params.privateOrPublic;
   entity.deadline = event.params.deadline_;
   entity.choiceOne = event.params.choiceOne_;
   entity.choiceTwo = event.params.choiceTwo_;
@@ -91,6 +93,7 @@ export function handleBETCREATED3(event: BETCREATED3): void {
 
   // Entity fields can be set based on event parameters
   entity.name = event.params.name_;
+  entity.privateOrPublic = event.params.privateOrPublic;
   entity.deadline = event.params.deadline_;
   entity.choiceOne = event.params.choiceOne_;
   entity.choiceTwo = event.params.choiceTwo_;
