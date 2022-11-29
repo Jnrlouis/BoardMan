@@ -9,8 +9,9 @@ type BetEvent @entity {
   choiceFour: Bytes
   correctChoice: Int
   betMaster: Bytes!
-  pundit: Bytes
+  pundit: [Bytes!]!
   amount: BigInt
+  totalNOB: BigInt
   profit: BigInt
   executed: Boolean
 }

@@ -21,6 +21,7 @@ export class BetEvent extends Entity {
     this.set("choiceOne", Value.fromBytes(Bytes.empty()));
     this.set("choiceTwo", Value.fromBytes(Bytes.empty()));
     this.set("betMaster", Value.fromBytes(Bytes.empty()));
+    this.set("pundit", Value.fromBytesArray(new Array(0)));
   }
 
   save(): void {
@@ -146,21 +147,13 @@ export class BetEvent extends Entity {
     this.set("betMaster", Value.fromBytes(value));
   }
 
-  get pundit(): Bytes | null {
+  get pundit(): Array<Bytes> {
     let value = this.get("pundit");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+    return value!.toBytesArray();
   }
 
-  set pundit(value: Bytes | null) {
-    if (!value) {
-      this.unset("pundit");
-    } else {
-      this.set("pundit", Value.fromBytes(<Bytes>value));
-    }
+  set pundit(value: Array<Bytes>) {
+    this.set("pundit", Value.fromBytesArray(value));
   }
 
   get amount(): BigInt | null {
@@ -177,6 +170,23 @@ export class BetEvent extends Entity {
       this.unset("amount");
     } else {
       this.set("amount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get totalNOB(): BigInt | null {
+    let value = this.get("totalNOB");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalNOB(value: BigInt | null) {
+    if (!value) {
+      this.unset("totalNOB");
+    } else {
+      this.set("totalNOB", Value.fromBigInt(<BigInt>value));
     }
   }
 

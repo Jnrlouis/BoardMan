@@ -32,7 +32,7 @@ export function handlePRIVATEBETCREATED(event: BETCREATED): void {
   entity.choiceOne = event.params.choiceOne_;
   entity.choiceTwo = event.params.choiceTwo_;
   entity.betMaster = event.params.betMaster_;
-  entity.pundit = event.params.opponentAddress_;
+  entity.pundit = [event.params.opponentAddress_];
   entity.amount = event.params.amount_;
 
   // Entities can be written to the store with `.save()`
@@ -55,6 +55,9 @@ export function handleBETCREATED1(event: BETCREATED1): void {
   entity.choiceOne = event.params.choiceOne_;
   entity.choiceTwo = event.params.choiceTwo_;
   entity.betMaster = event.params.betMaster_;
+  let newPundit = entity.pundit;
+  newPundit.push(event.params.betMaster_);
+  entity.pundit = newPundit;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -77,6 +80,9 @@ export function handleBETCREATED2(event: BETCREATED2): void {
   entity.choiceTwo = event.params.choiceTwo_;
   entity.choiceThree = event.params.choiceThree_;
   entity.betMaster = event.params.betMaster_;
+  let newPundit = entity.pundit;
+  newPundit.push(event.params.betMaster_);
+  entity.pundit = newPundit;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -100,6 +106,9 @@ export function handleBETCREATED3(event: BETCREATED3): void {
   entity.choiceThree = event.params.choiceThree_;
   entity.choiceFour = event.params.choiceFour_;
   entity.betMaster = event.params.betMaster_;
+  let newPundit = entity.pundit;
+  newPundit.push(event.params.betMaster_);
+  entity.pundit = newPundit;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -132,9 +141,15 @@ export function handleBETPLACED(event: BETPLACED): void {
     return;
   }
 
-  // Entity fields can be set based on event parameters
-  entity.pundit = event.params.pundit_;
-  entity.amount = event.params.amount_;
+  let newPundit = entity.pundit;
+  newPundit.push(event.params.pundit_);
+  entity.pundit = newPundit;
+  if (!entity.amount) {
+    entity.amount = event.params.amount_;
+  } else {
+    let BigAmount = entity.amount;
+    entity.amount = BigAmount + event.params.amount_;
+  }
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -148,8 +163,28 @@ export function handleBETPLACED1(event: BETPLACED1): void {
   if (!entity) {
     return;
   }
-  entity.pundit = event.params.pundit_;
-  entity.amount = event.params.amount_;
+  let newPundit = entity.pundit;
+  newPundit.push(event.params.pundit_);
+  entity.pundit = newPundit;
+
+  if (!entity.amount) {
+    entity.amount = event.params.amount_;
+  } else {
+    let BigAmount = entity.amount;
+    entity.amount = BigAmount + event.params.amount_;
+  }
+
+  const ONE = BigInt.fromI32(1);
+
+  if (!entity.totalNOB) {
+    
+    entity.totalNOB = ONE;
+  } else {
+    let total = entity.totalNOB;
+    entity.totalNOB = total + ONE;
+    
+  }
+  
 
   // Entities can be written to the store with `.save()`
   entity.save()
