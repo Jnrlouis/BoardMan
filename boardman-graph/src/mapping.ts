@@ -34,6 +34,10 @@ export function handlePRIVATEBETCREATED(event: BETCREATED): void {
   entity.betMaster = event.params.betMaster_;
   entity.pundit = [event.params.opponentAddress_];
   entity.amount = event.params.amount_;
+  entity.executed = false;
+  const ONE = BigInt.fromI32(1);
+  let total = entity.totalNOB;
+  entity.totalNOB = total + ONE;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -58,6 +62,9 @@ export function handleBETCREATED1(event: BETCREATED1): void {
   let newPundit = entity.pundit;
   newPundit.push(event.params.betMaster_);
   entity.pundit = newPundit;
+  entity.executed = false;
+  const ZERO = BigInt.fromI32(0);
+  entity.totalNOB = ZERO;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -83,6 +90,9 @@ export function handleBETCREATED2(event: BETCREATED2): void {
   let newPundit = entity.pundit;
   newPundit.push(event.params.betMaster_);
   entity.pundit = newPundit;
+  entity.executed = false;
+  const ZERO = BigInt.fromI32(0);
+  entity.totalNOB = ZERO;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -109,6 +119,9 @@ export function handleBETCREATED3(event: BETCREATED3): void {
   let newPundit = entity.pundit;
   newPundit.push(event.params.betMaster_);
   entity.pundit = newPundit;
+  entity.executed = false;
+  const ZERO = BigInt.fromI32(0);
+  entity.totalNOB = ZERO;
 
   // Entities can be written to the store with `.save()`
   entity.save()
@@ -124,7 +137,7 @@ export function handleBETEXECUTED(event: BETEXECUTED): void {
   }
 
   entity.correctChoice = event.params.correctChoice_;
-  entity.executed = event.params.executed_;
+  entity.executed = true;
 
 }
 
@@ -150,7 +163,15 @@ export function handleBETPLACED(event: BETPLACED): void {
     let BigAmount = entity.amount;
     entity.amount = BigAmount + event.params.amount_;
   }
+  
+  const ONE = BigInt.fromI32(1);
 
+  let total = entity.totalNOB;
+  entity.totalNOB = total + ONE;
+  
+
+  // Entities can be written to the store with `.save()`
+  entity.save()
   // Entities can be written to the store with `.save()`
   entity.save()
 }
@@ -175,15 +196,8 @@ export function handleBETPLACED1(event: BETPLACED1): void {
   }
 
   const ONE = BigInt.fromI32(1);
-
-  if (!entity.totalNOB) {
-    
-    entity.totalNOB = ONE;
-  } else {
-    let total = entity.totalNOB;
-    entity.totalNOB = total + ONE;
-    
-  }
+  let total = entity.totalNOB;
+  entity.totalNOB = total + ONE;
   
 
   // Entities can be written to the store with `.save()`

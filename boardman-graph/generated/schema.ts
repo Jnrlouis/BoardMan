@@ -22,6 +22,7 @@ export class BetEvent extends Entity {
     this.set("choiceTwo", Value.fromBytes(Bytes.empty()));
     this.set("betMaster", Value.fromBytes(Bytes.empty()));
     this.set("pundit", Value.fromBytesArray(new Array(0)));
+    this.set("totalNOB", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -173,21 +174,13 @@ export class BetEvent extends Entity {
     }
   }
 
-  get totalNOB(): BigInt | null {
+  get totalNOB(): BigInt {
     let value = this.get("totalNOB");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value!.toBigInt();
   }
 
-  set totalNOB(value: BigInt | null) {
-    if (!value) {
-      this.unset("totalNOB");
-    } else {
-      this.set("totalNOB", Value.fromBigInt(<BigInt>value));
-    }
+  set totalNOB(value: BigInt) {
+    this.set("totalNOB", Value.fromBigInt(value));
   }
 
   get profit(): BigInt | null {

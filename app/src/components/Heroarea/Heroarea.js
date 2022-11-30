@@ -3,15 +3,16 @@ import "./Heroarea.css";
 
 import bet7 from "../../assets/bet7.jpg";
 import bet8 from "../../assets/bet8.jpg";
-
 import bet9 from "../../assets/bet9.jpg";
+import bet10 from "../../assets/bet10.webp";
+import bet11 from "../../assets/bet11.webp";
 
 import TypeWriter from "typewriter-effect";
 
 import { useNavigate } from "react-router-dom";
 
-const images = [bet7, bet8, bet9];
-const colors = ["#0088FE", "#00C49F", "#FFBB28"];
+const images = [bet10, bet7, bet8, bet9, bet11];
+const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FFBB28", "#FFBB28"];
 
 const Heroarea = () => {
   const navigate = useNavigate();

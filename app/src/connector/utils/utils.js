@@ -2,6 +2,7 @@ import { utils } from "ethers";
 import { getBoardManContractInstance } from "./getBoardManContractInstance";
 import { getNumBets } from "./getNumBets";
 import { getMyBets } from "../../queries/mybets.js";
+import { getPopularBets} from "../../queries/getPopularBets"
 
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -72,7 +73,23 @@ import "react-toastify/dist/ReactToastify.css";
         const bet = await fetchBetsById(provider, j);
         bets.push(bet);
       }
-      console.log("My Bets ID: ", bets);
+      return bets;
+    } catch (error) {
+      console.error(error);
+      toast.error("An Error occured!");
+    }
+  };
+
+  export const fetchAllPopularBets = async (provider) => {
+    try {
+      const popularBetsId = await getPopularBets();
+      const numBetsId = popularBetsId.length;
+      const bets = [];
+      for (let i = 0; i < numBetsId; i++) {
+        let j = popularBetsId[i][0];
+        const bet = await fetchBetsById(provider, j);
+        bets.push(bet);
+      }
       return bets;
     } catch (error) {
       console.error(error);

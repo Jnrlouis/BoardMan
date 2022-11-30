@@ -24,4 +24,4 @@ export const getMyBets = async (myBetAddress) => {
     } catch (err) {
       console.log(err);
     }
-  }
+}

@@ -11,7 +11,7 @@ type BetEvent @entity {
   betMaster: Bytes!
   pundit: [Bytes!]!
   amount: BigInt
-  totalNOB: BigInt
+  totalNOB: BigInt!
   profit: BigInt
   executed: Boolean
 }

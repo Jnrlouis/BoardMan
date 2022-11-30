@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getNumBets } from "../connector/utils/getNumBets";
-import { fetchAllBets, fetchAllMyBets, getChallengeAccepted, checkActive, checkExecuted} from "../connector/utils/utils";
+import { fetchBetsById, fetchAllBets, fetchAllMyBets, fetchAllPopularBets,
+  getChallengeAccepted, checkActive, checkExecuted} from "../connector/utils/utils";
 
 import { motion } from "framer-motion";
 import "./styles/Bets.css";
@@ -34,6 +35,9 @@ const Bets = () => {
   const [usersChoice, setUsersChoice] = useState("0");
   const [bets, setBets] = useState([]);
   const [myBets, setMyBets] = useState([]);
+  const [searchId, setSearchId] = useState();
+  const [searchedId, setSearchedId] = useState();
+  const [popularBets, setPopularBets] = useState([]);
   const [betStake, setBetStake] = useState("0");
   const [betDetails, setBetDetails] = useState([]);
   const web3ModalRef = useRef();
@@ -75,7 +79,29 @@ const Bets = () => {
     }
   };
 
-  const fetchBetsById = async (index) => {
+  const SearchPopularBetsById = async () => {
+    try {
+      const provider = await getProviderOrSigner(web3ModalRef);
+      const popularBet = await fetchAllPopularBets(provider);
+      setPopularBets(popularBet);
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const SearchBetsById = async () => {
+    try {
+      const provider = await getProviderOrSigner(web3ModalRef);
+      const retrievedBet = await fetchBetsById(provider, searchId);
+      setSearchedId(retrievedBet);
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const fetchBetsByID = async (index) => {
     let theBets = [];
     theBets.push(bets[index]);
     setBetDetails(theBets);
@@ -616,7 +642,7 @@ const Bets = () => {
                         className="btn1"
                         onClick={() => {
                           setDetailsModal("modal-container");
-                          fetchBetsById(p.betId);
+                          fetchBetsByID(p.betId);
                         }}
                       >
                         Details
@@ -627,7 +653,7 @@ const Bets = () => {
                           onClick={() => {
                             if (p.deadline.getTime() < Date.now() && !p.executed) {
                               setUpdateModal("modal-container");
-                              fetchBetsById(p.betId);
+                              fetchBetsByID(p.betId);
                             } else if (p.deadline.getTime() < Date.now() && p.executed) {
                               toast.warning("Bet Already Executed");
                             } 
@@ -644,7 +670,7 @@ const Bets = () => {
                           onClick={() => {
                             if (p.deadline.getTime() > Date.now()) {
                               setEnterModal("modal-container");
-                              fetchBetsById(p.betId);
+                              fetchBetsByID(p.betId);
                             } else {
                               toast.warning("Bet DeadLine Reached");
                             }
@@ -800,7 +826,7 @@ const Bets = () => {
                         className="btn1"
                         onClick={() => {
                           setDetailsModal("modal-container");
-                          fetchBetsById(p.betId);
+                          fetchBetsByID(p.betId);
                         }}
                       >
                         Details
@@ -811,7 +837,7 @@ const Bets = () => {
                           onClick={() => {
                             if (p.deadline.getTime() < Date.now() && !p.executed) {
                               setUpdateModal("modal-container");
-                              fetchBetsById(p.betId);
+                              fetchBetsByID(p.betId);
                             } else if (p.deadline.getTime() < Date.now() && p.executed) {
                               toast.warning("Bet Already Executed");
                             } 
@@ -828,7 +854,7 @@ const Bets = () => {
                           onClick={() => {
                             if (p.deadline.getTime() > Date.now()) {
                               setEnterModal("modal-container");
-                              fetchBetsById(p.betId);
+                              fetchBetsByID(p.betId);
                             } else {
                               toast.warning("Bet DeadLine Reached");
                             }
