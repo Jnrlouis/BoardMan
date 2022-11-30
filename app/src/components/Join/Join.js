@@ -20,9 +20,9 @@ const Join = () => {
   return (
     <div className="join">
       <div className="join__head">
-        <h1 className="join__h1">It's Easy to Make a Bet and Win</h1>
+        <h1 className="join__h1">It's Easy to Create a Bet and Win by Placing Bets</h1>
         <p className="join__para">
-          You get to make money on the blockchain with Master Bet
+          You get to have FUN and make Money with BoardMan
           <br /> With the following steps{" "}
         </p>
       </div>

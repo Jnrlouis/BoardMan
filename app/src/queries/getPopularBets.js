@@ -6,6 +6,7 @@ function FETCH_POPULAR_BETS_ID() {
           first: 5
           orderBy: totalNOB
           orderDirection: desc
+          where: {executed : false}
         ) {
           id
         }
