@@ -25,6 +25,12 @@
   font-weight: 700;
 }
 .h1__p1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 200;
+  color: var(--border-color);
   cursor: pointer;
 }
 
@@ -177,12 +183,7 @@ span {
     font-size: 22px;
     font-weight: 700;
   }
-  .h1__p1 {
-    font-size: 15px;
-    font-weight: 200;
-    color: var(--border-color);
-    cursor: pointer;
-  }
+  
 
   .t__card {
     display: flex;

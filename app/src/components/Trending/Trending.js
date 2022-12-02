@@ -75,10 +75,11 @@ const Trending = () => {
 
       <div className="t__h1">
         <p>Trending Bets</p>
+      </div>
         <p onClick={() => navigate("bets")} className="h1__p1">
           View All
         </p>
-      </div>
+      
       <div className="t__cards">
         {popularBets.length > 0 ? (
           <>
