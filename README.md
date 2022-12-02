@@ -51,6 +51,7 @@ The Bet Master creates the Event with the:
 - Bet Deadline
 - First Outcome
 - Second Outcome
+- 
 *More outcomes can be added, the minimum allowed outcome is two(2) while the maximum is four(4).*
 
 After creating the Bet Event, the Bet ID can be shared and other users invited to place bets on their desired outcomes. The Bet Master is not allowed to place bets on the Bet Event.
