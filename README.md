@@ -5,7 +5,7 @@
 - **Solidity** - *for the Smart Contract*
 - **Hardhat** - *for the Smart Contract development and testing*
 - **thirdweb** - *thirdweb release used for deployment*
-- **RainbowKitUI** - *for Connecting the Wallet*
+- **RainbowKit UI** - *for Connecting the Wallet*
 - **wagmi** - *wagmi hooks used for integrating the Smart Contract to the frontend*
 - **ethersJs** - *ethers used for integrating the Smart contract and the frontend*
 - **React** - *React used for the frontend*
