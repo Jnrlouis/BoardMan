@@ -84,10 +84,8 @@ const Bets = () => {
     if (filterState == "betName") {
       SearchBetNameBetsById();
     } else if (filterState == "betId") {
-      if (inputValue >= 0) {
+      if (inputValue) {
         SearchBetsById()
-      } else {
-        toast.error("Input Value Out of Bounds!");
       }
     } else if (filterState == "creatorAddress") {
       SearchBetMasterBetsById();
@@ -136,8 +134,10 @@ const Bets = () => {
 
   const SearchBetsById = async () => {
     try {
+      setBets([]);
       const provider = await getProviderOrSigner(web3ModalRef);
       let retrievedBetList = [];
+      console.log("Input Value: ", inputValue);
       if (inputValue >= 0) {
         const retrievedBet = await fetchBetsById(provider, inputValue);
         retrievedBetList.push(retrievedBet);
