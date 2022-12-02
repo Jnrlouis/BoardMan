@@ -22,7 +22,7 @@ BoardMan is a decentralized customizable betting app where users can create thei
 ### CREATING BETS
 There are two types of Bet Events in Boardman - Private & Public Bet Events.
 
-**Private Bets**
+**Private Bets:**
 A maximum of two(2) people are allowed to participate. Whenever you want to bet against a particular person, whether it is a friend or random internet stranger, the Private Bet is your best bet. All you need is their wallet address... and their opinion.
 The Private Bet uses a winner-takes-all model (5% service fee included).
 
@@ -41,7 +41,7 @@ When the Bet Event has been updated by the Bet Master, the total Bet Amount woul
 In the case of any malicious actor, your INTEGRITY POINTS would be deducted and you'd be unable to create or place bets on BoardMan.
 After the verification period, the Winner of the Bet Event would be able to claim the prize.
 
-**Public Bets**
+**Public Bets:**
 Unlike the Private Bet, there is NO maximum allowed number of participants in the Public Bet. This uses an Odds system which is updated and adjusted on-chain.
 
 The Bet Master creates the Event with the:
