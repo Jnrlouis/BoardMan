@@ -7,17 +7,6 @@
   color: white;
 }
 
-/* .ig {
-  background: black;
-  color: white;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
-  text-decoration: none !important;
-  padding: 0.25rem;
-  color: white;
-  border-radius: 0.7rem;
-  display: flex;
-  border: 1px solid transparent;
-} */
 .block {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -59,7 +48,6 @@
   padding: 5px;
 }
 
-/* Users comment */
 
 .user {
   padding-top: 20px;
@@ -271,27 +259,6 @@
     padding-right: 15px;
     border-radius: 15px;
   }
-  /* .card>h1 {
-        padding-bottom: 10px;
-        font-size: 28px;
-    }
-
-    .card>p {
-        padding-bottom: 10px;
-    }
-
-    .icon-block {
-        padding: 5px;
-    }
-
-    .icon {
-        font-size: 50px;
-        color: white;
-        border-radius: 50%;
-        border: 1px solid gold;
-        padding: 5px;
-    } */
-  */
 
   /* Users comment */
 

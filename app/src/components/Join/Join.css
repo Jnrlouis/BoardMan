@@ -85,7 +85,6 @@
   justify-content: center;
 }
 
-/* responsive css */
 
 @media screen and (max-width: 900px) {
   .join__steps {
