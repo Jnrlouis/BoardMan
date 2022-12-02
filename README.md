@@ -13,11 +13,12 @@
 
 ## Use Case
 
-You're in a heated argument on twitter, you're so sure of your opinion, matter of fact, you're so sure that you're willing to put your money where your mouth is... But this is a random internet stranger. Who do you trust to act as the middleman and hold your money until the bet is settled. Random internet stranger suggests Mr. X, he said he trusts him. But do you? Are they trying to pull a fast one on you? It's not that you have doubts concerning your opinion, you don't just trust random internet strangers. Thankfully, you don't have to! Welcome to Boardman.
+You're in a heated argument on twitter, you're so sure of your opinion, matter of fact, you're so sure that you're willing to put your money where your mouth is... But this is a random internet stranger. Who do you trust to act as the middleman and hold your money until the bet is settled. Random internet stranger suggests Mr. X, he said he trusts him. But do you? Are they trying to pull a fast one on you? It's not that you have doubts concerning your opinion, you don't just trust random internet strangers. Thankfully, you don't have to. 
+Welcome to BoardMan.
 
 ## BoardMan
 
-BoardMan is a decentralized customizable betting app where users can create their own events to bet on. Unlike regular betting apps, with BoardMan, users can bet on any and everything!
+BoardMan is a decentralized customizable betting app where users can create their own events to bet on. Unlike regular betting apps, with BoardMan, users can bet on any and everything! BoardMan utilizes the transparency of the blockchain to act as a middleman for your bets. 
 
 ### CREATING BETS
 There are two types of Bet Events in Boardman - Private & Public Bet Events.
