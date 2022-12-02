@@ -80,6 +80,44 @@
   font-family: "Poppins", sans-serif;
 }
 
+.attribute__input {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.attribute__input p {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.text__input__bets {
+  width: 100%;
+  align-self: flex-start;
+}
+
+.radio__div {
+  display: flex;
+  flex-direction: row;
+
+  /* justify-content: flex-start;
+  align-items: flex-start; */
+  width: 50%;
+  gap: 40px;
+}
+
+.radio__info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
 .bets__filter__icon {
   color: var(--border-color);
   font-size: 25px;

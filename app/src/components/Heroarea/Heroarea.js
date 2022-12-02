@@ -61,6 +61,7 @@ const Heroarea = () => {
                     "Share the Event with your firends to bet on",
                     "Whether it is a friend or random internet stranger...",
                     "Private Bet is your best bet!",
+                    "May the odds be in your favour."
                   ],
                 }}
               />

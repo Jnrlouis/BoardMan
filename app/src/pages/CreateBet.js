@@ -7,20 +7,19 @@ import { createBet, createPrivateBet } from "../connector/createBet.Conn";
 import { getProviderOrSigner } from "../connector/utils/getProviderOrSigner";
 import { FaMoneyBill } from "react-icons/fa";
 import { AiOutlineMoneyCollect } from "react-icons/ai";
+import pol from "../assets/polygon.svg";
 
-
-import {ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateBet = (props) => {
-
   const [pinstate, setPinstate] = useState("pick");
 
   const [nameBetEvent, setNameBetEvent] = useState("");
-  const [nameChoiceOne, setNameChoiceOne] = useState('');
-  const [nameChoiceTwo, setNameChoiceTwo] = useState('');
-  const [nameChoiceThree, setNameChoiceThree] = useState('');
-  const [nameChoiceFour, setNameChoiceFour] = useState('');
+  const [nameChoiceOne, setNameChoiceOne] = useState("");
+  const [nameChoiceTwo, setNameChoiceTwo] = useState("");
+  const [nameChoiceThree, setNameChoiceThree] = useState("");
+  const [nameChoiceFour, setNameChoiceFour] = useState("");
   const [deadline, setDeadline] = useState(0);
   const [inputValueNftDescription, setInputValueNftDescription] = useState("");
   const [inputValueAttribute, setInputValueAttribute] = useState("");
@@ -30,6 +29,7 @@ const CreateBet = (props) => {
   const [attributeValues, setAttributeValues] = useState([]);
 
   const [images, setImages] = useState([]);
+  const [guideState, setGuideState] = useState(false);
 
   const [nftModal, setNftModal] = useState("modal-container__target");
   const [updateModal, setUpdateModal] = useState("modal-container__target");
@@ -37,7 +37,6 @@ const CreateBet = (props) => {
 
   const wrapperRef = useRef(null);
   const web3ModalRef = useRef();
-
 
   const renderState = () => {
     let state;
@@ -57,7 +56,6 @@ const CreateBet = (props) => {
     setPinstate(e.target.value);
   };
 
-
   const onInputChangeWalletAddress = (event) => {
     const { value } = event.target;
     setInputWalletAddress(value);
@@ -66,10 +64,9 @@ const CreateBet = (props) => {
   const deleteAttributeValue = (index) => {
     const updatedList = [...attributeValues];
     updatedList.splice(index, 1);
-    updatedList.length == 0 ? setNameChoiceThree("") : setNameChoiceFour("")
+    updatedList.length == 0 ? setNameChoiceThree("") : setNameChoiceFour("");
 
     setAttributeValues(updatedList);
-    
   };
 
   const sendAttributeValue = () => {
@@ -90,28 +87,77 @@ const CreateBet = (props) => {
     setDetailsModal("modal-container__target");
   };
 
-
-  const createBetContract = async() => {
+  const createBetContract = async () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
-    await createBet(signer, nameBetEvent, 
-      nameChoiceOne, nameChoiceTwo, 
-      nameChoiceThree, nameChoiceFour, deadline);
-  }
+    await createBet(
+      signer,
+      nameBetEvent,
+      nameChoiceOne,
+      nameChoiceTwo,
+      nameChoiceThree,
+      nameChoiceFour,
+      deadline
+    );
+  };
 
-  const createPrivateBetContract = async() => {
+  const createPrivateBetContract = async () => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
 
-    await createPrivateBet(signer, nameBetEvent, deadline,
+    await createPrivateBet(
+      signer,
+      nameBetEvent,
+      deadline,
       inputWalletAddress,
-      nameChoiceOne, nameChoiceTwo, betAmount);
-  }
+      nameChoiceOne,
+      nameChoiceTwo,
+      betAmount
+    );
+  };
 
   const navigate = useNavigate();
   return (
     <div className="createBet__container">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="createBet__box">
         <h1>CREATE YOUR BET</h1>
+        <br />
+        <h3>GUIDELINES</h3>
+        <p className="guide">
+          <i>
+            <b>
+              Always use concise descriptive unambiguous Bet Event Names. DO NOT
+              USE: PORTUGAL VS URUGUAY USE: Winner of Portugal VS Uruguay 2022
+              World Cup Match Always use all possible outcomes in the Event
+              options. Example: Winner of Portugal VS Uruguay 2022 World Cup
+              Match DO NOT USE - Outcome One: Portugal; Outcome Two: Uruguay USE
+              - Outcome One: Portugal; Outcome Two: Uruguay; Outcome Three:{" "}
+            </b>
+          </i>
+
+          <div className={guideState ? "open__guide" : "close__guide"}>
+            <i>
+              <b>
+                Draw The Bet Deadline to be used should be BEFORE the Outcome
+                can be decided. Example: Would it rain in GRA, Port Harcourt,
+                Nigeria on the 30th Nov 2022? DO NOT USE - Deadline: 31st
+                November 2022 9:00 AM USE - Deadline: 29th November 2022 9:00 PM
+                Avoid Creating One-sided Bet Events as you may lose your Bet
+                Creation Fee if you do so. Create controversial Bet Events with
+                well-balanced Possible Outcomes. Promote your Bet Events by
+                sharing the ID on your social media platforms and inviting
+                others to place their bets. Bet Responsibly!{" "}
+              </b>
+            </i>
+          </div>
+          <span
+            onClick={() => {
+              setGuideState(!guideState);
+            }}
+          >
+            {guideState ? "Show Less" : "Show More"}
+          </span>
+        </p>
+        <br />
         <div ref={wrapperRef} className="drop-file-input">
           <div className="drop-file-input__label">
             <p>Choose Your Bet Type</p>
@@ -157,7 +203,7 @@ const CreateBet = (props) => {
                 placeholder="Enter Bet Amount in Matic"
                 min="0.5"
                 max="5.0"
-                step= "0.1"
+                step="0.1"
                 onChange={(e) => setBetAmount(e.target.value)}
                 className="text__input__name"
               />
@@ -178,13 +224,15 @@ const CreateBet = (props) => {
                   name="deadline"
                   onChange={(e) => setDeadline(e.target.value)}
                   className="text__input__name"
-                  required />
+                  required
+                />
               </div>
 
               <div>
                 <span className="details">Outcomes:</span>
                 <div className="attr__input">
-                  <input className="text__input__attr"
+                  <input
+                    className="text__input__attr"
                     placeholder="First Outcome"
                     type="text"
                     required
@@ -194,7 +242,8 @@ const CreateBet = (props) => {
                   />
                 </div>
                 <div className="attr__input">
-                  <input className="text__input__attr"
+                  <input
+                    className="text__input__attr"
                     placeholder="Second Outcome"
                     type="text"
                     required
@@ -205,12 +254,12 @@ const CreateBet = (props) => {
                 </div>
               </div>
               <div className="nft__upload__div">
-                <button 
+                <button
                   onClick={createPrivateBetContract}
-                  className="nft__upload">
-                    <div className="button__text">Create</div>
-                  </button>
-                
+                  className="nft__upload"
+                >
+                  <div className="button__text">Create</div>
+                </button>
               </div>
             </div>
           </form>
@@ -234,7 +283,9 @@ const CreateBet = (props) => {
                 className="text__input__name"
               />
 
-              <p className="bet__amount">Bet Amount: 5 MATIC</p>
+              <p className="bet__amount">
+                Bet Amount: <img className="polygon" src={pol} alt="" /> 5 {" "}
+              </p>
 
               <div>
                 <span className="details">Deadline:</span>
@@ -243,29 +294,32 @@ const CreateBet = (props) => {
                   name="deadline"
                   onChange={(e) => setDeadline(e.target.value)}
                   className="text__input__name"
-                  required />
+                  required
+                />
               </div>
               <div>
                 <span className="details">Outcomes:</span>
                 <div className="attr__input">
-                <input className="text__input__attr"
-                  placeholder="First Outcome"
-                  type="text"
-                  required
-                  minLength="1"
-                  maxLength="25"
-                  onChange={(e) => setNameChoiceOne(e.target.value)}
-                />
+                  <input
+                    className="text__input__attr"
+                    placeholder="First Outcome"
+                    type="text"
+                    required
+                    minLength="1"
+                    maxLength="25"
+                    onChange={(e) => setNameChoiceOne(e.target.value)}
+                  />
                 </div>
                 <div className="attr__input">
-                <input className="text__input__attr"
-                  placeholder="Second Outcome"
-                  type="text"
-                  required
-                  minLength="1"
-                  maxLength="25"
-                  onChange={(e) => setNameChoiceTwo(e.target.value)}
-                />
+                  <input
+                    className="text__input__attr"
+                    placeholder="Second Outcome"
+                    type="text"
+                    required
+                    minLength="1"
+                    maxLength="25"
+                    onChange={(e) => setNameChoiceTwo(e.target.value)}
+                  />
                 </div>
               </div>
               {attributeValues.length > 0 ? (
@@ -278,14 +332,11 @@ const CreateBet = (props) => {
                         className="text__input__attr"
                         minLength="1"
                         maxLength="25"
-                    
                         onChange={(e) => {
-                          
-                          index == 0 ? setNameChoiceThree(e.target.value) :
-                          setNameChoiceFour(e.target.value)
-                          
-                          }
-                        }
+                          index == 0
+                            ? setNameChoiceThree(e.target.value)
+                            : setNameChoiceFour(e.target.value);
+                        }}
                       />
 
                       <button
@@ -300,27 +351,21 @@ const CreateBet = (props) => {
                   ))}
                 </div>
               ) : null}
-              <div
-               
-                className="add__attributes"
-              >
+              <div className="add__attributes">
                 <div className="add__link">
                   <span className="add__icon__span">
                     <AiOutlinePlus className="add__icon" />
                   </span>
-                  <div className="add__text"
-                    onClick={sendAttributeValue}
-                  >Add Event Options</div>
+                  <div className="add__text" onClick={sendAttributeValue}>
+                    Add Event Options
+                  </div>
                 </div>
               </div>
 
               <div className="nft__upload__div">
-                <button 
-                  onClick={createBetContract}
-                  className="nft__upload">
-                    <div className="button__text">Create</div>
-                  </button>
-                
+                <button onClick={createBetContract} className="nft__upload">
+                  <div className="button__text">Create</div>
+                </button>
               </div>
             </div>
           </form>
@@ -334,17 +379,12 @@ const CreateBet = (props) => {
       <br />
       <br />
 
-
       <div className="enterbutton__div__heroarea">
-            
-            <button
-              onClick={() => navigate("/bets")}
-              className="enter__button"
-            >
-              <span className="button__text">View Bet</span>
-            </button>
+        <button onClick={() => navigate("/bets")} className="enter__button">
+          <span className="button__text">View Bet</span>
+        </button>
       </div>
-      
+
       {/* <div className="nft__div">
         <h1 className="nft__h1">My Bets</h1>
 

@@ -6,11 +6,14 @@ import logo from "../../assets/logo.jpg";
 import { FaMoneyBill } from "react-icons/fa";
 import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import Loader from "../../constants/Loader/Loader";
-import {ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import pol from "../../assets/polygon.svg";
 import { getProviderOrSigner } from "../../connector/utils/getProviderOrSigner";
-import { fetchAllPopularBets, fetchBetsById} from "../../connector/utils/utils";
+import {
+  fetchAllPopularBets,
+  fetchBetsById,
+} from "../../connector/utils/utils";
 import { useAccount } from "wagmi";
 
 const Trending = () => {
@@ -49,15 +52,15 @@ const Trending = () => {
       setBetDetails([]);
       const provider = await getProviderOrSigner(web3ModalRef);
       let fetchedBetList = [];
-      const fetchedBet = await fetchBetsById(provider, BETid)
-      fetchedBetList.push(fetchedBet)
+      const fetchedBet = await fetchBetsById(provider, BETid);
+      fetchedBetList.push(fetchedBet);
       console.log("fETCHED bETTT", fetchedBetList);
       setBetDetails(fetchedBetList);
     } catch (error) {
       toast.error(error);
       console.log(error);
     }
-  }
+  };
 
   const fetchBetsByID = async (index) => {
     let theBets = [];
@@ -65,11 +68,9 @@ const Trending = () => {
     setBetDetails(theBets);
   };
 
-
-
   return (
     <div className="t__container">
-      <ToastContainer/>
+      <ToastContainer />
 
       <div className="t__h1">
         <p>Trending Bets</p>
@@ -78,93 +79,99 @@ const Trending = () => {
         </p>
       </div>
       <div className="t__cards">
-              {popularBets.length > 0 ? (
-                <>
-                  {popularBets.map((p, index) => (
-                    <div key={index} className="t__card">
-                      <div className="t__left">
-                        <div className="t__left__info">
-                          <div className="subject">
-                            <span>#{p.betId}</span>
-                          </div>
+        {popularBets.length > 0 ? (
+          <>
+            {popularBets.map((p, index) => (
+              <div key={index} className="t__card">
+                <div className="t__left">
+                  <div className="t__left__info">
+                    <div className="subject">
+                      <span>#{p.betId}</span>
+                    </div>
+                  </div>
+                  <div className="t__left__info">
+                    <div className="subject">
+                      {p.betType == 0 ? (
+                        <div className="value">
+                          {p.totalNOB}
+                          <BsFillPersonFill className="person" />
                         </div>
-                        <div className="t__left__info">
-                          <div className="subject">
-                            {p.betType == 0 ? (
-                              <div className="value">
-                                {p.totalNOB}
-                                <BsFillPersonFill className="person" />
-                              </div>
-                            ) : p.challengeAccepted.toString() == "false" ? (
-                              <div className="value">
-                                {1}
-                                <BsFillPersonFill className="person" />
-                              </div>
-                            ) : (
-                              <div className="value">
-                                {2} <BsFillPersonFill className="person" />
-                              </div>
-                            )}
-                          </div>
+                      ) : p.challengeAccepted.toString() == "false" ? (
+                        <div className="value">
+                          {1}
+                          <BsFillPersonFill className="person" />
                         </div>
-                        <div className="t__left__info">
-                          <div className="subject">
-                            {" "}
-                            <div className={
-                              p.betType == 0 ?
-                              (p.executed  ? " red" : " green") :
-                              (!p.active ? " red" : " green")}>
-                              
-                              {
-                              p.betType == 0 ?
-                              (p.executed ? "CLOSED" : "OPEN") :
-                              (!p.active ? "CLOSED" : "OPEN")}
-                            </div>
-                          </div>
+                      ) : (
+                        <div className="value">
+                          {2} <BsFillPersonFill className="person" />
                         </div>
-                        <div className="t__left__info">
-                          <div className="subject">
-                            <div className="value1">
-                              <div className="value1">
-                                <FaMoneyBill className="money" />
-                                <p>
-                                  {p.betType == 0
-                                    ? parseFloat(p.totalAmountBet).toFixed(3)
-                                    : p.betAmount}{" "}
-                                  Matic
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="t__center">
-                        {p.betType == 0 ? (
-                          <IoIosPeople className="state__logo" />
-                        ) : (
-                          <IoMdPeople className="state__logo" />
-                        )}
-                      </div>
-                      <div className="t__right">
-                        <p>{p.betType == 0 ? "Public" : "Private"}</p>
-                        <button
-                          className="btn1"
-                          onClick={() => {
-                            setDetailsModal("modal-container");
-                            fetchBetsByIds(p.betId);
-                          }}
-                        >
-                          Details
-                        </button>
-                        
-                        
+                      )}
+                    </div>
+                  </div>
+                  <div className="t__left__info">
+                    <div className="subject">
+                      {" "}
+                      <div
+                        className={
+                          p.betType == 0
+                            ? p.executed
+                              ? " red"
+                              : " green"
+                            : !p.active
+                            ? " red"
+                            : " green"
+                        }
+                      >
+                        {p.betType == 0
+                          ? p.executed
+                            ? "CLOSED"
+                            : "OPEN"
+                          : !p.active
+                          ? "CLOSED"
+                          : "OPEN"}
                       </div>
                     </div>
-                  ))}
-                </>
-              ) : (
-                <Loader />
-              )}
+                  </div>
+                  <div className="t__left__info">
+                    <div className="subject">
+                      <div className="value1">
+                        <div className="value1">
+                          <img className="polygon" src={pol} alt="" />
+                          <p>
+                            {p.betType == 0
+                              ? parseFloat(p.totalAmountBet).toFixed(3)
+                              : p.betAmount}{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="t__center">
+                  {p.betType == 0 ? (
+                    <IoIosPeople className="state__logo" />
+                  ) : (
+                    <IoMdPeople className="state__logo" />
+                  )}
+                </div>
+                <div className="t__right">
+                  <p>{p.betType == 0 ? "Public" : "Private"}</p>
+                  <button
+                    className="btn1"
+                    onClick={() => {
+                      setDetailsModal("modal-container");
+                      fetchBetsByIds(p.betId);
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
       <div className={detailsModal}>
         <section class="modal">
@@ -279,7 +286,7 @@ const Trending = () => {
 
                             {p.totalNumChoices == 2 ? (
                               ""
-                            ) : ( p.totalNumChoices == 3 ? (
+                            ) : p.totalNumChoices == 3 ? (
                               <div className="details__values">
                                 <p>Third Odd:</p>
                                 <p className="value">
@@ -301,7 +308,7 @@ const Trending = () => {
                                   </p>
                                 </div>
                               </>
-                            ))}
+                            )}
 
                             <div className="details__values">
                               <p>Total Bets Placed:</p>
@@ -361,23 +368,22 @@ const Trending = () => {
 
                             <div className="details__values">
                               <p>Correct Outcome:</p>
-                              <p className="value">
-                                {p.privateCorrChoice}
-                              </p>
+                              <p className="value">{p.privateCorrChoice}</p>
                             </div>
 
                             <div className="details__values">
                               <p>Winner:</p>
                               <p className="value">
-                                {p.privateCorrChoice == p.privateFirstChoice ? 
-                                  p.betMaster : (p.privateCorrChoice == p.privateSecondChoice ?
-                                  p.opponentAddress : "N/A")
-                                }
+                                {p.privateCorrChoice == p.privateFirstChoice
+                                  ? p.betMaster
+                                  : p.privateCorrChoice == p.privateSecondChoice
+                                  ? p.opponentAddress
+                                  : "N/A"}
                               </p>
                             </div>
                           </>
                         )}
-                        
+
                         <div className="details__values">
                           <p>Executed:</p>
                           <p className="value">{p.executed.toString()}</p>
@@ -399,9 +405,7 @@ const Trending = () => {
         Popular Bets
       </button>
       </div> */}
-
-    </div> 
-    
+    </div>
   );
 };
 

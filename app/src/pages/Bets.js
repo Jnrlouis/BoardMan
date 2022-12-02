@@ -1,29 +1,50 @@
 import React, { useRef, useState, useEffect } from "react";
 import { BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getNumBets } from "../connector/utils/getNumBets";
-import { fetchBetsById, fetchAllBets, fetchAllMyBets, fetchAllPopularBets,
-  getChallengeAccepted, checkActive, checkExecuted} from "../connector/utils/utils";
-
+import {
+  fetchBetsById,
+  fetchAllBets,
+  fetchAllMyBets,
+  fetchAllPopularBets,
+  fetchAllBetMasterBets,
+  fetchAllBetNameBets,
+  getChallengeAccepted,
+  checkActive,
+  checkExecuted,
+} from "../connector/utils/utils";
+import pol from "../assets/polygon.svg";
 import { motion } from "framer-motion";
 import "./styles/Bets.css";
 import { BsFillPersonFill, BsPlayBtn, BsSearch } from "react-icons/bs";
 import { FaMoneyBill } from "react-icons/fa";
 import logo from "../assets/logo.jpg";
 import { getProviderOrSigner } from "../connector/utils/getProviderOrSigner";
-import {placeBet, acceptChallenge, recallChallenge} from "../connector/placeBet.Conn.js"
-import {claimPayout, claimPayoutBetMaster, claimPayoutPrivate} from "../connector/claimPayout.Conn.js";
-import {executeBet, executePrivateBet} from "../connector/executeBet.Conn.js";
+import {
+  placeBet,
+  acceptChallenge,
+  recallChallenge,
+} from "../connector/placeBet.Conn.js";
+import {
+  claimPayout,
+  claimPayoutBetMaster,
+  claimPayoutPrivate,
+} from "../connector/claimPayout.Conn.js";
+import { executeBet, executePrivateBet } from "../connector/executeBet.Conn.js";
 import { IoIosPeople, IoMdPeople } from "react-icons/io";
+import { IoAlertCircleSharp } from "react-icons/io5";
+
 import Loader from "../constants/Loader/Loader";
 import { useAccount } from "wagmi";
 
-import {ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Bets = () => {
   const [betstate, setBetState] = useState("");
   const [filterState, setFilterState] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [searchState, setSearchState] = useState(false);
+  const [filterName, setFilterName] = useState("");
+  const [inputValue, setInputValue] = useState();
   const [betAmount, setBetAmount] = useState("");
   const [detailsModal, setDetailsModal] = useState("modal-container__target");
   const [filterModal, setFilterModal] = useState("modal-container__target");
@@ -36,20 +57,40 @@ const Bets = () => {
   const [bets, setBets] = useState([]);
   const [myBets, setMyBets] = useState([]);
   const [searchId, setSearchId] = useState();
-  const [searchedId, setSearchedId] = useState();
+  const [searchedId, setSearchedId] = useState([]);
   const [popularBets, setPopularBets] = useState([]);
   const [betStake, setBetStake] = useState("0");
   const [betDetails, setBetDetails] = useState([]);
   const web3ModalRef = useRef();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(2);
 
   const address = useAccount().address;
-
-  console.log(address);
 
   useEffect(() => {
     fetchAllBetsById();
     fetchAllMyBetsById();
   }, [address]);
+
+  useEffect(() => {
+    if (!inputValue) {
+      return;
+    }
+    if (filterState == "betName") {
+      SearchBetNameBetsById();
+    } else if (filterState == "betId") {
+      if (inputValue >= 0) {
+        SearchBetsById()
+      } else {
+        toast.error("Input Value Out of Bounds!");
+      }
+    } else if (filterState == "creatorAddress") {
+      SearchBetMasterBetsById();
+    }
+    
+  }, [inputValue]);
 
   const getBets = async () => {
     const provider = await getProviderOrSigner(web3ModalRef);
@@ -93,8 +134,51 @@ const Bets = () => {
   const SearchBetsById = async () => {
     try {
       const provider = await getProviderOrSigner(web3ModalRef);
-      const retrievedBet = await fetchBetsById(provider, searchId);
-      setSearchedId(retrievedBet);
+      let retrievedBetList = [];
+      if (inputValue >= 0) {
+        const retrievedBet = await fetchBetsById(provider, inputValue);
+        retrievedBetList.push(retrievedBet);
+        console.log("RETRIEVED LIST: ", retrievedBetList);
+      if (retrievedBetList) {
+        setBets(retrievedBetList);
+      }
+      } else {
+        toast.error("Input Value Out of Bounds!");
+      }
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const SearchBetMasterBetsById = async () => {
+    try {
+      setBets([]);
+      const provider = await getProviderOrSigner(web3ModalRef);
+      const retrievedBetList = await fetchAllBetMasterBets(provider, inputValue);
+      console.log("RETRIEVED LIST: ", retrievedBetList);
+      if (retrievedBetList) {
+        setBets(retrievedBetList);
+      }
+      console.log("Bet Master: ", betDetails[0].betMaster)
+      console.log("Bet Master? ", betDetails[0].betMaster != 0)
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const SearchBetNameBetsById = async () => {
+    try {
+      setBets([]);
+      const provider = await getProviderOrSigner(web3ModalRef);
+      const retrievedBetList = await fetchAllBetNameBets(provider, inputValue);
+      console.log("RETRIEVED LIST: ", retrievedBetList);
+      if (retrievedBetList) {
+        setBets(retrievedBetList);
+      }
+      console.log("Bet Master: ", bets[0].betMaster)
+      console.log("Bet Master? ", bets[0].betMaster != 0)
     } catch (error) {
       toast.error(error);
       console.log(error);
@@ -107,12 +191,27 @@ const Bets = () => {
     setBetDetails(theBets);
   };
 
-  const placeBetContract = async(_betId) => {
+  const fetchBetsByIds = async (BETid) => {
+    try {
+      setBetDetails([]);
+      const provider = await getProviderOrSigner(web3ModalRef);
+      let fetchedBetList = [];
+      const fetchedBet = await fetchBetsById(provider, BETid);
+      fetchedBetList.push(fetchedBet);
+      console.log("fETCHED bETTT", fetchedBetList);
+      setBetDetails(fetchedBetList);
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
+  };
+
+  const placeBetContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     await placeBet(signer, _betId.toString(), usersChoice, betStake);
-  }
+  };
 
-  const placePrivateBetContract = async(_betId) => {
+  const placePrivateBetContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     console.log("Accepted?: ", accepted);
@@ -121,10 +220,9 @@ const Bets = () => {
     } else {
       await acceptChallenge(signer, _betId.toString());
     }
-    
-  }
+  };
 
-  const recallChallengeContract = async(_betId) => {
+  const recallChallengeContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     const isActive = await checkActive(signer, _betId);
@@ -132,62 +230,61 @@ const Bets = () => {
       toast.warning("Challenge Already Accepted");
     } else if (!isActive) {
       toast.warning("Bet Event Inactive");
-    } else{
+    } else {
       await recallChallenge(signer, _betId.toString());
     }
-    
-  }
+  };
 
-  const executeBetContract = async(_betId) => {
+  const executeBetContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     await executeBet(signer, _betId.toString(), correctChoice);
-  }
+  };
 
-  const executePrivateBetContract = async(_betId) => {
+  const executePrivateBetContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     if (!accepted) {
-      toast.warning("Challenge was not accepted")
+      toast.warning("Challenge was not accepted");
     } else {
       await executePrivateBet(signer, _betId, correctChoice);
-    }  
-  }
+    }
+  };
 
-  const claimPayoutContract = async(_betId) => {
+  const claimPayoutContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      toast.warning("Bet Event NOT Executed")
+      toast.warning("Bet Event NOT Executed");
     } else {
       await claimPayout(signer, _betId);
-    }  
-  }
+    }
+  };
 
-  const claimPayoutBetMasterContract = async(_betId) => {
+  const claimPayoutBetMasterContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      toast.warning("Bet Event NOT Executed")
+      toast.warning("Bet Event NOT Executed");
     } else {
       await claimPayoutBetMaster(signer, _betId);
-    }  
-  }
+    }
+  };
 
-  const claimPayoutPrivateContract = async(_betId) => {
+  const claimPayoutPrivateContract = async (_betId) => {
     const signer = await getProviderOrSigner(web3ModalRef, true);
     const accepted = await getChallengeAccepted(signer, _betId);
     const isActive = await checkActive(signer, _betId);
     const isExecuted = await checkExecuted(signer, _betId);
     if (!isExecuted) {
-      toast.warning("Bet Event NOT Executed")
+      toast.warning("Bet Event NOT Executed");
     } else if (!accepted) {
-      toast.warning("Challenge was not accepted")
+      toast.warning("Challenge was not accepted");
     } else if (!isActive) {
-      toast.warning("Bet Event Inactive")
+      toast.warning("Bet Event Inactive");
     } else {
       await claimPayoutPrivate(signer, _betId);
-    }  
-  }
+    }
+  };
 
   const onInputChange = (event) => {
     const { value } = event.target;
@@ -199,13 +296,250 @@ const Bets = () => {
     setBetAmount(value);
   };
 
+  const onSearchButton = async () => {
+    setSearchState(true);
+    setLoading(true);
+    console.log("Search State: ", searchState);
+    console.log("Input Value: ", inputValue);
+    if (filterState == "betName") {
+      try {
+        await SearchBetNameBetsById();
+      } catch (error) {
+        console.error(error);
+        toast.error(error);
+      }
+    } else if (filterState == "betId") {
+      try {
+        await SearchBetsById();
+      } catch (error) {
+        console.error(error);
+        toast.error(error);
+      }
+    } else if (filterState == "creatorAddress") {
+      try {
+        await SearchBetMasterBetsById();
+      } catch (error) {
+        console.error(error);
+        toast.error(error);
+      }
+    }
+    setLoading(false);
+  };
+
+  const returnSearch = () => {
+    return (
+      <>
+        <div className="t__cards">
+          {loading ?
+            <Loader />
+            : 
+              ( 
+                <>
+                  {bets[0]?.betMaster != 0 ? (
+                    <>
+                      {bets.map((p, index) => (
+                        <div key={index} className="t__card">
+                          <div className="t__left">
+                            <div className="t__left__info">
+                              <div className="subject">
+                                <span>#{p.betId}</span>
+                              </div>
+                            </div>
+                            <div className="t__left__info">
+                              <div className="subject">
+                                {p.betType == 0 ? (
+                                  <div className="value">
+                                    {p.totalNOB}
+                                    <BsFillPersonFill className="person" />
+                                  </div>
+                                ) : p.challengeAccepted.toString() == "false" ? (
+                                  <div className="value">
+                                    {1}
+                                    <BsFillPersonFill className="person" />
+                                  </div>
+                                ) : (
+                                  <div className="value">
+                                    {2} <BsFillPersonFill className="person" />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="t__left__info">
+                              <div className="subject">
+                                {" "}
+                                <div
+                                  className={
+                                    p.betType == 0
+                                      ? p.executed
+                                        ? " red"
+                                        : " green"
+                                      : !p.active
+                                      ? " red"
+                                      : " green"
+                                  }
+                                >
+                                  {p.betType == 0
+                                    ? p.executed
+                                      ? "CLOSED"
+                                      : "OPEN"
+                                    : !p.active
+                                    ? "CLOSED"
+                                    : "OPEN"}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="t__left__info">
+                              <div className="subject">
+                                <div className="value1">
+                                  <div className="value1">
+                                    <img className="polygon" src={pol} alt="" />
+                                    <p>
+                                      {p.betType == 0
+                                        ? parseFloat(p.totalAmountBet).toFixed(3)
+                                        : p.betAmount}{" "}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="t__center">
+                            {p.betType == 0 ? (
+                              <IoIosPeople className="state__logo" />
+                            ) : (
+                              <IoMdPeople className="state__logo" />
+                            )}
+                          </div>
+                          <div className="t__right">
+                            <p>{p.betType == 0 ? "Public" : "Private"}</p>
+                            <button
+                              className="btn1"
+                              onClick={() => {
+                                setDetailsModal("modal-container");
+                                fetchBetsByIds(p.betId);
+                              }}
+                            >
+                              Details
+                            </button>
+                            {p.betMaster == address ? (
+                            <button
+                              className="btn2"
+                              onClick={() => {
+                                if (
+                                  p.deadline.getTime() < Date.now() &&
+                                  !p.executed
+                                ) {
+                                  setUpdateModal("modal-container");
+                                  fetchBetsByIds(p.betId);
+                                } else if (
+                                  p.deadline.getTime() < Date.now() &&
+                                  p.executed
+                                ) {
+                                  toast.warning("Bet Already Executed");
+                                } else {
+                                  toast.warning("Bet DeadLine has not reached");
+                                }
+                              }}
+                            >
+                              Update
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                if (p.deadline.getTime() > Date.now()) {
+                                  setEnterModal("modal-container");
+                                  fetchBetsByIds(p.betId);
+                                } else {
+                                  toast.warning("Bet DeadLine Reached");
+                                }
+                              }}
+                              className="btn2"
+                            >
+                              Enter
+                            </button>
+                          )}
+                          {p.betType == 1 ? (
+                            address == p.betMaster ? (
+                              <button
+                                className="btn2"
+                                onClick={() => {
+                                  recallChallengeContract(p.betId);
+                                }}
+                              >
+                                Recall
+                              </button>
+                            ) : (
+                              ""
+                            )
+                          ) : (
+                            ""
+                          )}
+                          {p.executed ? (
+                            p.betType == 0 ? (
+                              address == p.betMaster ? (
+                                <button
+                                  className="btn2"
+                                  onClick={() => {
+                                    claimPayoutBetMasterContract(p.betId);
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn2"
+                                  onClick={() => {
+                                    claimPayoutContract(p.betId);
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              )
+                            ) : (
+                              <button
+                                className="btn2"
+                                onClick={() => {
+                                  claimPayoutPrivateContract(p.betId);
+                                }}
+                              >
+                                Claim
+                              </button>
+                            )
+                          ) : (
+                            ""
+                          )}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <div className="t__cards">
+                      <div className="t__card">
+                        <div className="t__center"> 
+                          <div className="subject">
+                            <div className="value"> 
+                              <IoAlertCircleSharp className="state__logo" />
+                              Bet Not Found
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )
+          }
+        </div>
+      </>
+    )
+  }
+
   const sendDetailsValue = () => {
     setDetailsModal("modal-container__target");
   };
 
   const renderState = () => {
     let state;
-
     if (betstate == "myBets") {
       state = "myBets";
     } else {
@@ -258,7 +592,7 @@ const Bets = () => {
   };
   return (
     <div className="bets__container">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="bets__header">
         <h1 className="bets__h1">Available Bets</h1>
         <p className="bets__p">Here are all the Pending Bets</p>
@@ -302,6 +636,7 @@ const Bets = () => {
             className="text__input__bets"
           />
           <button
+            onClick={onSearchButton}
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >
             {" "}
@@ -361,7 +696,7 @@ const Bets = () => {
               <p>
                 <i>
                   Note: Please do well not to provide <br />
-                  false information{" "} as the
+                  false information as the
                   <br />
                   correct option as you would lose
                   <br />
@@ -391,168 +726,203 @@ const Bets = () => {
                 {betDetails.map((p, index) => (
                   <div key={index}>
                     <div className="attribute__input">
-                      {p.betType == 0 ?
-                        (
-                          p.totalNumChoices == 2 ?
+                      {p.betType == 0 ? (
+                        p.totalNumChoices == 2 ? (
                           <>
+                            <div className="radio__div">
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age1"
+                                  name="age"
+                                  checked={correctChoice == "1"}
+                                  value="1"
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="1">{p.outcomeOne}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={correctChoice == "2"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="2">{p.outcomeTwo}</label>
+                              </div>
+                            </div>
+                          </>
+                        ) : p.totalNumChoices == 3 ? (
+                          <>
+                            <div className="radio__div">
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age1"
+                                  name="age"
+                                  value="1"
+                                  checked={correctChoice == "1"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="1">{p.outcomeOne}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={correctChoice == "2"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="2">{p.outcomeTwo}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age3"
+                                  name="age"
+                                  value="3"
+                                  checked={correctChoice == "3"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="3">{p.outcomeThree}</label>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="radio__div">
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age1"
+                                  name="age"
+                                  value="1"
+                                  checked={correctChoice == "1"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="1">{p.outcomeOne}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={correctChoice == "2"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="2">{p.outcomeTwo}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age3"
+                                  name="age"
+                                  value="3"
+                                  checked={correctChoice == "3"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="3">{p.outcomeThree}</label>
+                              </div>
+
+                              <div className="radio__info">
+                                <input
+                                  type="radio"
+                                  id="age4"
+                                  name="age"
+                                  value="4"
+                                  checked={correctChoice == "4"}
+                                  onChange={(e) => {
+                                    setCorrectChoice(e.target.value);
+                                  }}
+                                />
+                                <label for="4">{p.outcomeFour}</label>
+                              </div>
+                            </div>
+                          </>
+                        )
+                      ) : (
+                        <>
                           <div className="radio__div">
                             <div className="radio__info">
-                              <input 
-                                type="radio" 
+                              <input
+                                type="radio"
                                 id="age1"
                                 name="age"
-                                checked = {correctChoice == "1"}
                                 value="1"
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="1">{p.outcomeOne}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age2" name="age" value="2"
-                                checked = {correctChoice == "2"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="2">{p.outcomeTwo}</label>
-                            </div>
-                          </div>
-                          
-                          </>
-                         :
-                          (p.totalNumChoices == 3 ?
-                          ( <>
-                          <div className="radio__div">
-                            <div className="radio__info">
-                              <input type="radio" id="age1" name="age" value="1"
-                                checked = {correctChoice == "1"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="1">{p.outcomeOne}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age2" name="age" value="2"
-                                checked = {correctChoice == "2"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="2">{p.outcomeTwo}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age3" name="age" value="3"
-                                checked = {correctChoice == "3"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="3">{p.outcomeThree}</label>
-                            </div>
-                          </div>
-                          
-                          </>
-                          )
-                          :
-                          ( <>
-                          <div className="radio__div">
-                            <div className="radio__info">
-                              <input type="radio" id="age1" name="age" value="1"
-                                checked = {correctChoice == "1"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="1">{p.outcomeOne}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age2" name="age" value="2"
-                              checked = {correctChoice == "2"}
-                              onChange= {(e) => {
-                                setCorrectChoice(e.target.value)
-                                
-                                }} />
-                              <label for="2">{p.outcomeTwo}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age3" name="age" value="3"
-                              checked = {correctChoice == "3"}
-                              onChange= {(e) => {
-                                setCorrectChoice(e.target.value)
-                                
-                                }} />
-                              <label for="3">{p.outcomeThree}</label>
-                            </div>
-
-                            <div className="radio__info">
-                              <input type="radio" id="age4" name="age" value="4"
-                              checked = {correctChoice == "4"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
-                              <label for="4">{p.outcomeFour}</label>
-                            </div>
-                          </div>
-                          
-                          </>
-                          )
-
-                        )
-                        )
-                        
-                        :
-                        ( <>
-                          <div className="radio__div">
-                            <div className="radio__info">
-                              <input type="radio" id="age1" name="age" value="1"
-                                checked = {correctChoice == "1"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
+                                checked={correctChoice == "1"}
+                                onChange={(e) => {
+                                  setCorrectChoice(e.target.value);
+                                }}
+                              />
                               <label for="1">{p.privateFirstChoice}</label>
                             </div>
 
                             <div className="radio__info">
-                              <input type="radio" id="age2" name="age" value="2"
-                                checked = {correctChoice == "2"}
-                                onChange= {(e) => {
-                                  setCorrectChoice(e.target.value)
-                                  
-                                  }} />
+                              <input
+                                type="radio"
+                                id="age2"
+                                name="age"
+                                value="2"
+                                checked={correctChoice == "2"}
+                                onChange={(e) => {
+                                  setCorrectChoice(e.target.value);
+                                }}
+                              />
                               <label for="2">{p.privateSecondChoice}</label>
                             </div>
                           </div>
-
-                          
-                          </>
-                        )
-                        
-                      }
+                        </>
+                      )}
                     </div>
-                    {p.betType == 0 ?
+                    {p.betType == 0 ? (
                       <div className="attribute__button__div">
-                        <button className="attribute__button"
-                        onClick={() => {executeBetContract(p.betId)}}
-                        >Update</button>
+                        <button
+                          className="attribute__button"
+                          onClick={() => {
+                            executeBetContract(p.betId);
+                          }}
+                        >
+                          Update
+                        </button>
                       </div>
-                    :
-                    <div className="attribute__button__div">
-                      <button className="attribute__button"
-                      onClick={() => {executePrivateBetContract(p.betId)}}
-                      >Update</button>
-                    </div>
-                    }
-                    
+                    ) : (
+                      <div className="attribute__button__div">
+                        <button
+                          className="attribute__button"
+                          onClick={() => {
+                            executePrivateBetContract(p.betId);
+                          }}
+                        >
+                          Update
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </>
@@ -569,136 +939,148 @@ const Bets = () => {
             className="table__container__history"
           >
             <div className="t__cards">
-            {myBets.length > 0 ? (
-              <>
-                {myBets.map((p, index) => (
-                  <div key={index} className="t__card">
-                    <div className="t__left">
-                      <div className="t__left__info">
-                        <div className="subject">
-                          <span>#{p.betId}</span>
-                        </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
-                          {p.betType == 0 ? (
-                            <div className="value">
-                              {p.totalNOB}
-                              <BsFillPersonFill className="person" />
-                            </div>
-                          ) : p.challengeAccepted.toString() == "false" ? (
-                            <div className="value">
-                              {1}
-                              <BsFillPersonFill className="person" />
-                            </div>
-                          ) : (
-                            <div className="value">
-                              {2} <BsFillPersonFill className="person" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
-                          {" "}
-                          <div className={
-                            p.betType == 0 ?
-                            (p.executed  ? " red" : " green") :
-                            (!p.active ? " red" : " green")}>
-                            
-                            {
-                            p.betType == 0 ?
-                            (p.executed ? "CLOSED" : "OPEN") :
-                            (!p.active ? "CLOSED" : "OPEN")}
+              {myBets.length > 0 ? (
+                <>
+                  {myBets.map((p, index) => (
+                    <div key={index} className="t__card">
+                      <div className="t__left">
+                        <div className="t__left__info">
+                          <div className="subject">
+                            <span>#{p.betId}</span>
                           </div>
                         </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
-                          <div className="value1">
+                        <div className="t__left__info">
+                          <div className="subject">
+                            {p.betType == 0 ? (
+                              <div className="value">
+                                {p.totalNOB}
+                                <BsFillPersonFill className="person" />
+                              </div>
+                            ) : p.challengeAccepted.toString() == "false" ? (
+                              <div className="value">
+                                {1}
+                                <BsFillPersonFill className="person" />
+                              </div>
+                            ) : (
+                              <div className="value">
+                                {2} <BsFillPersonFill className="person" />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="t__left__info">
+                          <div className="subject">
+                            {" "}
+                            <div
+                              className={
+                                p.betType == 0
+                                  ? p.executed
+                                    ? " red"
+                                    : " green"
+                                  : !p.active
+                                  ? " red"
+                                  : " green"
+                              }
+                            >
+                              {p.betType == 0
+                                ? p.executed
+                                  ? "CLOSED"
+                                  : "OPEN"
+                                : !p.active
+                                ? "CLOSED"
+                                : "OPEN"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="t__left__info">
+                          <div className="subject">
                             <div className="value1">
-                              <FaMoneyBill className="money" />
-                              <p>
-                                {p.betType == 0
-                                  ? parseFloat(p.totalAmountBet).toFixed(3)
-                                  : p.betAmount}{" "}
-                                Matic
-                              </p>
+                              <div className="value1">
+                                <img className="polygon" src={pol} alt="" />
+                                <p>
+                                  {p.betType == 0
+                                    ? parseFloat(p.totalAmountBet).toFixed(3)
+                                    : p.betAmount}{" "}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="t__center">
-                      {p.betType == 0 ? (
-                        <IoIosPeople className="state__logo" />
-                      ) : (
-                        <IoMdPeople className="state__logo" />
-                      )}
-                    </div>
-                    <div className="t__right">
-                      <p>{p.betType == 0 ? "Public" : "Private"}</p>
-                      <button
-                        className="btn1"
-                        onClick={() => {
-                          setDetailsModal("modal-container");
-                          fetchBetsByID(p.betId);
-                        }}
-                      >
-                        Details
-                      </button>
-                      {p.betMaster == address ? (
+                      <div className="t__center">
+                        {p.betType == 0 ? (
+                          <IoIosPeople className="state__logo" />
+                        ) : (
+                          <IoMdPeople className="state__logo" />
+                        )}
+                      </div>
+                      <div className="t__right">
+                        <p>{p.betType == 0 ? "Public" : "Private"}</p>
                         <button
-                          className="btn2"
+                          className="btn1"
                           onClick={() => {
-                            if (p.deadline.getTime() < Date.now() && !p.executed) {
-                              setUpdateModal("modal-container");
-                              fetchBetsByID(p.betId);
-                            } else if (p.deadline.getTime() < Date.now() && p.executed) {
-                              toast.warning("Bet Already Executed");
-                            } 
-                            
-                            else {
-                              toast.warning("Bet DeadLine has not reached");
-                            }
+                            setDetailsModal("modal-container");
+                            fetchBetsByID(p.betId);
                           }}
                         >
-                          Update
+                          Details
                         </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            if (p.deadline.getTime() > Date.now()) {
-                              setEnterModal("modal-container");
-                              fetchBetsByID(p.betId);
-                            } else {
-                              toast.warning("Bet DeadLine Reached");
-                            }
-                          }}
-                          className="btn2"
-                        >
-                          Enter
-                        </button>
-                      )}
-                      {
-                        p.betType == 1 ? 
-                          address == p.betMaster ?
-                        (
+                        {p.betMaster == address ? (
                           <button
                             className="btn2"
                             onClick={() => {
-                              recallChallengeContract(p.betId);
+                              if (
+                                p.deadline.getTime() < Date.now() &&
+                                !p.executed
+                              ) {
+                                setUpdateModal("modal-container");
+                                fetchBetsByID(p.betId);
+                              } else if (
+                                p.deadline.getTime() < Date.now() &&
+                                p.executed
+                              ) {
+                                toast.warning("Bet Already Executed");
+                              } else {
+                                toast.warning("Bet DeadLine has not reached");
+                              }
                             }}
                           >
-                            Recall
+                            Update
                           </button>
-                        ) : "" : ""
-                      }
-                      {
-                        p.executed ? 
+                        ) : (
+                          <button
+                            onClick={() => {
+                              if (p.deadline.getTime() > Date.now()) {
+                                setEnterModal("modal-container");
+                                fetchBetsByID(p.betId);
+                              } else {
+                                toast.warning("Bet DeadLine Reached");
+                              }
+                            }}
+                            className="btn2"
+                          >
+                            Enter
+                          </button>
+                        )}
+                        {p.betType == 1 ? (
+                          address == p.betMaster ? (
+                            <button
+                              className="btn2"
+                              onClick={() => {
+                                recallChallengeContract(p.betId);
+                              }}
+                            >
+                              Recall
+                            </button>
+                          ) : (
+                            ""
+                          )
+                        ) : (
+                          ""
+                        )}
+                        {p.executed ? (
                           p.betType == 0 ? (
-                            address == p.betMaster ?
-                            (
+                            address == p.betMaster ? (
                               <button
                                 className="btn2"
                                 onClick={() => {
@@ -707,8 +1089,7 @@ const Bets = () => {
                               >
                                 Claim
                               </button>
-                            ) :
-                            (
+                            ) : (
                               <button
                                 className="btn2"
                                 onClick={() => {
@@ -718,8 +1099,7 @@ const Bets = () => {
                                 Claim
                               </button>
                             )
-                          ) :
-                          (
+                          ) : (
                             <button
                               className="btn2"
                               onClick={() => {
@@ -728,205 +1108,233 @@ const Bets = () => {
                             >
                               Claim
                             </button>
-                          ) : ""
-                        
-                      }
-                      
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <div className="t__cards">
+                  <div className="t__card">
+                    <div className="t__center"> 
+                      <div className="subject">
+                        <div className="value"> 
+                          <IoAlertCircleSharp className="state__logo" />
+                          No Bet Found
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </>
-            ) : (
-              <h1 className="nft__h1">No Bets Created... yet!</h1>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
           </motion.div>
         </>
       ) : (
         ""
       )}
-      {renderState() == "allBets" ? (
-        <motion.div
-          whileInView={{ x: [-100, 0], opacity: [0, 1] }}
-          transition={{ duration: 0.5 }}
-          className="table__container__history"
-        >
-          <h1 className="nft__h1">All Bets</h1>
-          <div className="t__cards">
-            {bets.length > 0 ? (
-              <>
-                {bets.map((p, index) => (
-                  <div key={index} className="t__card">
-                    <div className="t__left">
-                      <div className="t__left__info">
-                        <div className="subject">
-                          <span>#{p.betId}</span>
+
+      {searchState ? (
+        returnSearch()
+      ) : (
+        <>
+          {renderState() == "allBets" ? (
+            <motion.div
+              whileInView={{ x: [-100, 0], opacity: [0, 1] }}
+              transition={{ duration: 0.5 }}
+              className="table__container__history"
+            >
+              <h1 className="nft__h1">All Bets</h1>
+              <div className="t__cards">
+                {bets.length > 0 ? (
+                  <>
+                    {bets.map((p, index) => (
+                      <div key={index} className="t__card">
+                        <div className="t__left">
+                          <div className="t__left__info">
+                            <div className="subject">
+                              <span>#{p.betId}</span>
+                            </div>
+                          </div>
+                          <div className="t__left__info">
+                            <div className="subject">
+                              {p.betType == 0 ? (
+                                <div className="value">
+                                  {p.totalNOB}
+                                  <BsFillPersonFill className="person" />
+                                </div>
+                              ) : p.challengeAccepted.toString() == "false" ? (
+                                <div className="value">
+                                  {1}
+                                  <BsFillPersonFill className="person" />
+                                </div>
+                              ) : (
+                                <div className="value">
+                                  {2} <BsFillPersonFill className="person" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="t__left__info">
+                            <div className="subject">
+                              {" "}
+                              <div
+                                className={
+                                  p.betType == 0
+                                    ? p.executed
+                                      ? " red"
+                                      : " green"
+                                    : !p.active
+                                    ? " red"
+                                    : " green"
+                                }
+                              >
+                                {p.betType == 0
+                                  ? p.executed
+                                    ? "CLOSED"
+                                    : "OPEN"
+                                  : !p.active
+                                  ? "CLOSED"
+                                  : "OPEN"}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="t__left__info">
+                            <div className="subject">
+                              <div className="value1">
+                                <div className="value1">
+                                  <img className="polygon" src={pol} alt="" />
+                                  <p>
+                                    {p.betType == 0
+                                      ? parseFloat(p.totalAmountBet).toFixed(3)
+                                      : p.betAmount}{" "}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
+                        <div className="t__center">
                           {p.betType == 0 ? (
-                            <div className="value">
-                              {p.totalNOB}
-                              <BsFillPersonFill className="person" />
-                            </div>
-                          ) : p.challengeAccepted.toString() == "false" ? (
-                            <div className="value">
-                              {1}
-                              <BsFillPersonFill className="person" />
-                            </div>
+                            <IoIosPeople className="state__logo" />
                           ) : (
-                            <div className="value">
-                              {2} <BsFillPersonFill className="person" />
-                            </div>
+                            <IoMdPeople className="state__logo" />
                           )}
                         </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
-                          {" "}
-                          <div className={
-                            p.betType == 0 ?
-                            (p.executed  ? " red" : " green") :
-                            (!p.active ? " red" : " green")}>
-                            
-                            {
-                            p.betType == 0 ?
-                            (p.executed ? "CLOSED" : "OPEN") :
-                            (!p.active ? "CLOSED" : "OPEN")}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="t__left__info">
-                        <div className="subject">
-                          <div className="value1">
-                            <div className="value1">
-                              <FaMoneyBill className="money" />
-                              <p>
-                                {p.betType == 0
-                                  ? parseFloat(p.totalAmountBet).toFixed(3)
-                                  : p.betAmount}{" "}
-                                Matic
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="t__center">
-                      {p.betType == 0 ? (
-                        <IoIosPeople className="state__logo" />
-                      ) : (
-                        <IoMdPeople className="state__logo" />
-                      )}
-                    </div>
-                    <div className="t__right">
-                      <p>{p.betType == 0 ? "Public" : "Private"}</p>
-                      <button
-                        className="btn1"
-                        onClick={() => {
-                          setDetailsModal("modal-container");
-                          fetchBetsByID(p.betId);
-                        }}
-                      >
-                        Details
-                      </button>
-                      {p.betMaster == address ? (
-                        <button
-                          className="btn2"
-                          onClick={() => {
-                            if (p.deadline.getTime() < Date.now() && !p.executed) {
-                              setUpdateModal("modal-container");
-                              fetchBetsByID(p.betId);
-                            } else if (p.deadline.getTime() < Date.now() && p.executed) {
-                              toast.warning("Bet Already Executed");
-                            } 
-                            
-                            else {
-                              toast.warning("Bet DeadLine has not reached");
-                            }
-                          }}
-                        >
-                          Update
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            if (p.deadline.getTime() > Date.now()) {
-                              setEnterModal("modal-container");
-                              fetchBetsByID(p.betId);
-                            } else {
-                              toast.warning("Bet DeadLine Reached");
-                            }
-                          }}
-                          className="btn2"
-                        >
-                          Enter
-                        </button>
-                      )}
-                      {
-                        p.betType == 1 ? 
-                          address == p.betMaster ?
-                        (
+                        <div className="t__right">
+                          <p>{p.betType == 0 ? "Public" : "Private"}</p>
                           <button
-                            className="btn2"
+                            className="btn1"
                             onClick={() => {
-                              recallChallengeContract(p.betId);
+                              setDetailsModal("modal-container");
+                              fetchBetsByID(p.betId);
                             }}
                           >
-                            Recall
+                            Details
                           </button>
-                        ) : "" : ""
-                      }
-                      {
-                        p.executed ? 
-                          p.betType == 0 ? (
-                            address == p.betMaster ?
-                            (
+                          {p.betMaster == address ? (
+                            <button
+                              className="btn2"
+                              onClick={() => {
+                                if (
+                                  p.deadline.getTime() < Date.now() &&
+                                  !p.executed
+                                ) {
+                                  setUpdateModal("modal-container");
+                                  fetchBetsByID(p.betId);
+                                } else if (
+                                  p.deadline.getTime() < Date.now() &&
+                                  p.executed
+                                ) {
+                                  toast.warning("Bet Already Executed");
+                                } else {
+                                  toast.warning("Bet DeadLine has not reached");
+                                }
+                              }}
+                            >
+                              Update
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                if (p.deadline.getTime() > Date.now()) {
+                                  setEnterModal("modal-container");
+                                  fetchBetsByID(p.betId);
+                                } else {
+                                  toast.warning("Bet DeadLine Reached");
+                                }
+                              }}
+                              className="btn2"
+                            >
+                              Enter
+                            </button>
+                          )}
+                          {p.betType == 1 ? (
+                            address == p.betMaster ? (
                               <button
                                 className="btn2"
                                 onClick={() => {
-                                  claimPayoutBetMasterContract(p.betId);
+                                  recallChallengeContract(p.betId);
                                 }}
                               >
-                                Claim
+                                Recall
                               </button>
-                            ) :
-                            (
+                            ) : (
+                              ""
+                            )
+                          ) : (
+                            ""
+                          )}
+                          {p.executed ? (
+                            p.betType == 0 ? (
+                              address == p.betMaster ? (
+                                <button
+                                  className="btn2"
+                                  onClick={() => {
+                                    claimPayoutBetMasterContract(p.betId);
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn2"
+                                  onClick={() => {
+                                    claimPayoutContract(p.betId);
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              )
+                            ) : (
                               <button
                                 className="btn2"
                                 onClick={() => {
-                                  claimPayoutContract(p.betId);
+                                  claimPayoutPrivateContract(p.betId);
                                 }}
                               >
                                 Claim
                               </button>
                             )
-                          ) :
-                          (
-                            <button
-                              className="btn2"
-                              onClick={() => {
-                                claimPayoutPrivateContract(p.betId);
-                              }}
-                            >
-                              Claim
-                            </button>
-                          ) : ""
-                        
-                      }
-                      
-                    </div>
-                  </div>
-                ))}
-              </>
-            ) : (
-              <Loader />
-            )}
-          </div>
-        </motion.div>
-      ) : (
-        ""
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <Loader />
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            ""
+          )}
+        </>
       )}
 
       <div className={enterModal}>
@@ -935,10 +1343,7 @@ const Bets = () => {
             <div className="modal__info">
               <h2 class="modal-title">Entering Bet:</h2>
               <p>
-                <i>
-                  Please enter the amount you want to stake
-                  and your option
-                </i>
+                <i>Please enter the amount you want to stake and your option</i>
               </p>
             </div>
 
@@ -963,199 +1368,220 @@ const Bets = () => {
                 {betDetails.map((p, index) => (
                   <div key={index}>
                     <div className="attribute__input">
-                      {p.betType == 0 ?
-                        
-                        (
-                          <>
+                      {p.betType == 0 ? (
+                        <>
                           <p>
-                          <input
-                            type="number"
-                            min="0.5"
-                            max="10.0"
-                            step= "0.1"
-                            required
-                            placeholder="Bet Amount"
-                            onChange={(e) => setBetStake(e.target.value)}
-                            className="text__input__bets"
-                          />
-                          <br />
-                          <br />
+                            <input
+                              type="number"
+                              min="0.5"
+                              max="10.0"
+                              step="0.1"
+                              required
+                              placeholder="Bet Amount"
+                              onChange={(e) => setBetStake(e.target.value)}
+                              className="text__input__bets"
+                            />
+                            <br />
+                            <br />
                           </p>
-                          
-                          { p.totalNumChoices == 2 ?
-                            (
+
+                          {p.totalNumChoices == 2 ? (
                             <div className="radio__div">
                               <div className="radio__info">
-                                <input 
-                                  type="radio" 
+                                <input
+                                  type="radio"
                                   id="age1"
                                   name="age"
-                                  checked = {usersChoice == "1"}
+                                  checked={usersChoice == "1"}
                                   value="1"
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="1">{p.outcomeOne}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age2" name="age" value="2"
-                                  checked = {usersChoice == "2"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={usersChoice == "2"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="2">{p.outcomeTwo}</label>
                               </div>
                             </div>
-                            )
-                            
-                          :
-                            (p.totalNumChoices == 3 ?
-                            (
+                          ) : p.totalNumChoices == 3 ? (
                             <div className="radio__div">
                               <div className="radio__info">
-                                <input type="radio" id="age1" name="age" value="1"
-                                  checked = {usersChoice == "1"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age1"
+                                  name="age"
+                                  value="1"
+                                  checked={usersChoice == "1"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="1">{p.outcomeOne}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age2" name="age" value="2"
-                                  checked = {usersChoice == "2"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={usersChoice == "2"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="2">{p.outcomeTwo}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age3" name="age" value="3"
-                                  checked = {usersChoice == "3"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age3"
+                                  name="age"
+                                  value="3"
+                                  checked={usersChoice == "3"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="3">{p.outcomeThree}</label>
                               </div>
                             </div>
-                            
-                            
-                            )
-                            
-                            :
-                            ( 
+                          ) : (
                             <div className="radio__div">
                               <div className="radio__info">
-                                <input type="radio" id="age1" name="age" value="1"
-                                  checked = {usersChoice == "1"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age1"
+                                  name="age"
+                                  value="1"
+                                  checked={usersChoice == "1"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="1">{p.outcomeOne}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age2" name="age" value="2"
-                                checked = {usersChoice == "2"}
-                                onChange= {(e) => {
-                                  setUsersChoice(e.target.value)
-                                  
-                                  }} />
+                                <input
+                                  type="radio"
+                                  id="age2"
+                                  name="age"
+                                  value="2"
+                                  checked={usersChoice == "2"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="2">{p.outcomeTwo}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age3" name="age" value="3"
-                                checked = {usersChoice == "3"}
-                                onChange= {(e) => {
-                                  setUsersChoice(e.target.value)
-                                  
-                                  }} />
+                                <input
+                                  type="radio"
+                                  id="age3"
+                                  name="age"
+                                  value="3"
+                                  checked={usersChoice == "3"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="3">{p.outcomeThree}</label>
                               </div>
 
                               <div className="radio__info">
-                                <input type="radio" id="age4" name="age" value="4"
-                                checked = {usersChoice == "4"}
-                                  onChange= {(e) => {
-                                    setUsersChoice(e.target.value)
-                                    
-                                    }} />
+                                <input
+                                  type="radio"
+                                  id="age4"
+                                  name="age"
+                                  value="4"
+                                  checked={usersChoice == "4"}
+                                  onChange={(e) => {
+                                    setUsersChoice(e.target.value);
+                                  }}
+                                />
                                 <label for="4">{p.outcomeFour}</label>
                               </div>
                             </div>
-                          
-                          
-                          )
-
-                        )}
-                          
+                          )}
                         </>
-                        )
-                        :
-                        ( 
-                        address == p.opponentAddress ?
-                        (
-                          <div className="modal__info">
-                            
-                            <p>
-                                <b>Bet Name: </b>
-                                
-                                {p.eventName}
-                                <br />
-                                <b>Stake: </b>
-                                
-                                {p.betAmount}
-                                <br />
-                                <b>Participants: </b>
-                                <br />
-                                <i> {p.betMaster} : {p.privateFirstChoice} </i>
-                                <br />
-                                <i> {p.opponentAddress} : {p.privateSecondChoice} </i>
-                                <br />
-                                <br />
-                            </p>
-                          </div>
-                        ) :
-                        (
-                          <div className="modal__info">
-                        
-                            <p>
-                              This is a private bet between: <i> {p.betMaster } </i> and 
-                              <i>{ p.opponentAddress}</i>. <br /> <br />
-                              <i>{address} </i>  is NOT ALLOWED to participate. 
-                            </p>
+                      ) : address == p.opponentAddress ? (
+                        <div className="modal__info">
+                          <p>
+                            <b>Bet Name: </b>
+
+                            {p.eventName}
+                            <br />
+                            <b>Stake: </b>
+
+                            {p.betAmount}
+                            <br />
+                            <b>Participants: </b>
+                            <br />
+                            <i>
+                              {" "}
+                              {p.betMaster} : {p.privateFirstChoice}{" "}
+                            </i>
+                            <br />
+                            <i>
+                              {" "}
+                              {p.opponentAddress} : {p.privateSecondChoice}{" "}
+                            </i>
                             <br />
                             <br />
-                          </div>
-                        )
-                        )
-                        
-                      }
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="modal__info">
+                          <p>
+                            This is a private bet between:{" "}
+                            <i> {p.betMaster} </i> and
+                            <i>{p.opponentAddress}</i>. <br /> <br />
+                            <i>{address} </i> is NOT ALLOWED to participate.
+                          </p>
+                          <br />
+                          <br />
+                        </div>
+                      )}
                     </div>
-                    {p.betType == 0 ?
+                    {p.betType == 0 ? (
                       <div className="attribute__button__div">
-                        <button className="attribute__button"
-                        onClick={() => {placeBetContract(p.betId)}}
-                        >Place Bet</button>
+                        <button
+                          className="attribute__button"
+                          onClick={() => {
+                            placeBetContract(p.betId);
+                          }}
+                        >
+                          Place Bet
+                        </button>
                       </div>
-                    :
-                    <div className="attribute__button__div">
-                      <button className="attribute__button"
-                      // disabled = {address == p.opponentAddress ? "false" : "true"}
-                      onClick={() => {placePrivateBetContract(p.betId)}}
-                      >Accept Challenge</button>
-                    </div>
-                    }
-                    
+                    ) : (
+                      <div className="attribute__button__div">
+                        <button
+                          className="attribute__button"
+                          // disabled = {address == p.opponentAddress ? "false" : "true"}
+                          onClick={() => {
+                            placePrivateBetContract(p.betId);
+                          }}
+                        >
+                          Accept Challenge
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </>
@@ -1277,7 +1703,7 @@ const Bets = () => {
 
                             {p.totalNumChoices == 2 ? (
                               ""
-                            ) : ( p.totalNumChoices == 3 ? (
+                            ) : p.totalNumChoices == 3 ? (
                               <div className="details__values">
                                 <p>Third Odd:</p>
                                 <p className="value">
@@ -1299,7 +1725,7 @@ const Bets = () => {
                                   </p>
                                 </div>
                               </>
-                            ))}
+                            )}
 
                             <div className="details__values">
                               <p>Total Bets Placed:</p>
@@ -1359,23 +1785,22 @@ const Bets = () => {
 
                             <div className="details__values">
                               <p>Correct Outcome:</p>
-                              <p className="value">
-                                {p.privateCorrChoice}
-                              </p>
+                              <p className="value">{p.privateCorrChoice}</p>
                             </div>
 
                             <div className="details__values">
                               <p>Winner:</p>
                               <p className="value">
-                                {p.privateCorrChoice == p.privateFirstChoice ? 
-                                  p.betMaster : (p.privateCorrChoice == p.privateSecondChoice ?
-                                  p.opponentAddress : "N/A")
-                                }
+                                {p.privateCorrChoice == p.privateFirstChoice
+                                  ? p.betMaster
+                                  : p.privateCorrChoice == p.privateSecondChoice
+                                  ? p.opponentAddress
+                                  : "N/A"}
                               </p>
                             </div>
                           </>
                         )}
-                        
+
                         <div className="details__values">
                           <p>Executed:</p>
                           <p className="value">{p.executed.toString()}</p>
@@ -1389,7 +1814,6 @@ const Bets = () => {
           </div>
         </section>
       </div>
-      
     </div>
   );
 };

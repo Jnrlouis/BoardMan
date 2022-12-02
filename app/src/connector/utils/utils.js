@@ -2,8 +2,9 @@ import { utils } from "ethers";
 import { getBoardManContractInstance } from "./getBoardManContractInstance";
 import { getNumBets } from "./getNumBets";
 import { getMyBets } from "../../queries/mybets.js";
-import { getPopularBets} from "../../queries/getPopularBets"
-
+import { getPopularBets} from "../../queries/getPopularBets";
+import { getBetMasterBets } from "../../queries/getBetsByCreatorAddress";
+import { getBetNameBets } from "../../queries/getBetsByName";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
       const contract = getBoardManContractInstance(provider);
       const bet = await contract.betEvents(id);
       const parsedBet = {
-        betId: id,
+        betId: bet.init.betId.toString(),
         deadline: new Date(parseInt(bet.init.deadline.toString()) * 1000),
         betMaster: bet.init.betMaster,
         eventName: bet.init.name,
@@ -50,12 +51,10 @@ import "react-toastify/dist/ReactToastify.css";
     try {
       const numOfBets = await getNumBets(provider);
       const bets = [];
-      //Hooks: numBets, SetBets
       for (let i = 0; i < numOfBets; i++) {
         const bet = await fetchBetsById(provider, i);
         bets.push(bet);
       }
-      // setBets(bets);
       return bets;
     } catch (error) {
       console.error(error);
@@ -69,7 +68,7 @@ import "react-toastify/dist/ReactToastify.css";
       const numBetsId = myBetsId.length;
       const bets = [];
       for (let i = 0; i < numBetsId; i++) {
-        let j = myBetsId[i][0];
+        let j = myBetsId[i]?.[0];
         const bet = await fetchBetsById(provider, j);
         bets.push(bet);
       }
@@ -87,6 +86,41 @@ import "react-toastify/dist/ReactToastify.css";
       const bets = [];
       for (let i = 0; i < numBetsId; i++) {
         let j = popularBetsId[i][0];
+        const bet = await fetchBetsById(provider, j);
+        bets.push(bet);
+      }
+      return bets;
+    } catch (error) {
+      console.error(error);
+      toast.error("An Error occured!");
+    }
+  };
+
+  export const fetchAllBetMasterBets = async (provider, inputAddress) => {
+    try {
+      const betMasterBetsId = await getBetMasterBets(inputAddress);
+      const numBetsId = betMasterBetsId.length;
+      const bets = [];
+      for (let i = 0; i < numBetsId; i++) {
+        let j = betMasterBetsId[i][0];
+        const bet = await fetchBetsById(provider, j);
+        bets.push(bet);
+      }
+      return bets;
+    } catch (error) {
+      console.error(error);
+      toast.error("An Error occured!");
+      toast.error("Address not valid!");
+    }
+  };
+
+  export const fetchAllBetNameBets = async (provider, inputName) => {
+    try {
+      const betNameBetsId = await getBetNameBets(inputName);
+      const numBetsId = betNameBetsId.length;
+      const bets = [];
+      for (let i = 0; i < numBetsId; i++) {
+        let j = betNameBetsId[i][0];
         const bet = await fetchBetsById(provider, j);
         bets.push(bet);
       }
