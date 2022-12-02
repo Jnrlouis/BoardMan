@@ -11,17 +11,21 @@
 - **React** - *React used for the frontend*
 - **theGraph** - *theGraph used for querying*
 
+**Deployed on Polygon Mumbai:** https://mumbai.polygonscan.com/address/0xc750a7EDA17422D4BDF23F6Cc742BAE8Df2f8Fd0
+
 ## Use Case
 
-You're in a heated argument on twitter, you're so sure of your opinion, matter of fact, you're so sure that you're willing to put your money where your mouth is... But this is a random internet stranger. Who do you trust to act as the middleman and hold your money until the bet is settled. Random internet stranger suggests Mr. X, he said he trusts him. But do you? Are they trying to pull a fast one on you? It's not that you have doubts concerning your opinion, you don't just trust random internet strangers. Thankfully, you don't have to. 
-Welcome to BoardMan.
+You're in a heated argument on Twitter, and you're so sure of your opinion, as a matter of fact, you're so sure that you're willing to put your money where your mouth is... But this is a random internet stranger. Who do you trust to act as the middleman and hold your money until the bet is settled? The random internet stranger suggested Mr SBF, he said he trusts him. But do you? Are they trying to pull a fast one on you? It's not that you have doubts regarding your opinion, you don't just trust random internet strangers. Thankfully, you don't have to.
+Introducing BoardMan!
 
 ## BoardMan
 
-BoardMan is a decentralized customizable betting app where users can create their own events to bet on. Unlike regular betting apps, with BoardMan, users can bet on any and everything! BoardMan utilizes the transparency of the blockchain to act as a middleman for your bets. 
+BoardMan is a decentralized customizable betting platform where users can create their own events to bet on. Unlike regular betting platforms, with BoardMan, users can bet on any and everything! BoardMan utilizes the transparency of the blockchain to act as a middleman for your bets. With BoardMan, you can either create private bets between closed groups OR create/participate in public controversial bets and WIN if you're right.
+
+Who do you think would win the 2023 Nigeria's Presidential Election? Who do you think would win the 2022 World Cup tournament? Head over to https://boardman.vercel.app and decide. Place your money where your heart is, and get rewarded for being right!
 
 ### CREATING BETS
-There are two types of Bet Events in Boardman - Private & Public Bet Events.
+As stated above, there are two types of Bet Events in Boardman - Private & Public Bet Events.
 
 **Private Bets:**
 A maximum of two(2) people are allowed to participate. Whenever you want to bet against a particular person, whether it is a friend or random internet stranger, the Private Bet is your best bet. All you need is their wallet address... and their opinion.
