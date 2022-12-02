@@ -34,7 +34,7 @@ import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import { IoAlertCircleSharp } from "react-icons/io5";
 
 import Loader from "../constants/Loader/Loader";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -68,14 +68,17 @@ const Bets = () => {
   const [postPerPage, setPostPerPage] = useState(2);
 
   const address = useAccount().address;
+  const { chain } = useNetwork();
 
   useEffect(() => {
-    fetchAllBetsById();
-    fetchAllMyBetsById();
-  }, [address]);
+    if (chain?.id == 80001) {
+      fetchAllBetsById();
+      fetchAllMyBetsById();
+    } 
+  }, [chain, address]);
 
   useEffect(() => {
-    if (!inputValue) {
+    if (!inputValue && chain?.id != 80001) {
       return;
     }
     if (filterState == "betName") {

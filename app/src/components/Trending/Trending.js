@@ -14,14 +14,18 @@ import {
   fetchAllPopularBets,
   fetchBetsById,
 } from "../../connector/utils/utils";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 const Trending = () => {
   const web3ModalRef = useRef();
+  const { chain } = useNetwork();
 
   useEffect(() => {
-    SearchPopularBets();
-  }, []);
+    if (chain?.id == 80001) {
+      console.log("Chain ID is: ", chain.id);
+      SearchPopularBets();
+    }  
+  }, [chain]);
 
   const navigate = useNavigate();
   const [popularBets, setPopularBets] = useState([]);
@@ -38,9 +42,12 @@ const Trending = () => {
   const SearchPopularBets = async () => {
     try {
       const provider = await getProviderOrSigner(web3ModalRef);
-      const popularBet = await fetchAllPopularBets(provider);
-      setPopularBets(popularBet);
-      console.log(popularBets);
+      if (provider) {
+        const popularBet = await fetchAllPopularBets(provider);
+        setPopularBets(popularBet);
+      } else {
+        setPopularBets([])
+      }
     } catch (error) {
       toast.error(error);
       console.log(error);
@@ -60,12 +67,6 @@ const Trending = () => {
       toast.error(error);
       console.log(error);
     }
-  };
-
-  const fetchBetsByID = async (index) => {
-    let theBets = [];
-    theBets.push(bets[index]);
-    setBetDetails(theBets);
   };
 
   return (

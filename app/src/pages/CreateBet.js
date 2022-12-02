@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState} from "react";
 import "./styles/CreateBet.css";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineDollar, AiOutlinePlus } from "react-icons/ai";
